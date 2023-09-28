@@ -1,4 +1,4 @@
-import { Seeder } from 'typeorm-extension';
+/* import { Seeder } from 'typeorm-extension';
 import { DataSource } from 'typeorm';
 import { Role } from 'src/users/entities/role.entity';
 
@@ -12,4 +12,4 @@ export default class UserSeeder implements Seeder {
       },
     ]);
   }
-}
+} */

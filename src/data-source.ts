@@ -1,4 +1,4 @@
-import { DataSource, DataSourceOptions } from 'typeorm';
+/* import { DataSource, DataSourceOptions } from 'typeorm';
 import { runSeeders, SeederOptions } from 'typeorm-extension';
 
 import UserSeeder from './db/user.seeder';
@@ -11,7 +11,7 @@ import UserSeeder from './db/user.seeder';
     username: 'root',
     password: '123456',
     database: 'ausentismo',
-    entities: [`${__dirname}/**/entities/*.{ts,js}`],
+    entities: [],
     seeds: [UserSeeder],
   };
 
@@ -19,4 +19,4 @@ import UserSeeder from './db/user.seeder';
   await dataSource.initialize();
 
   await runSeeders(dataSource);
-})();
+})(); */
