@@ -6,22 +6,35 @@ import {
   Patch,
   Param,
   Delete,
+  HttpStatus,
+  HttpCode,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { Roles } from 'src/auth/decorators/roles.decorator';
+import { ERole } from 'src/auth/role.enum';
+import { BuisnessException } from 'src/utils/buisness.exception';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @Roles(ERole.Admin)
+  @HttpCode(HttpStatus.CREATED)
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+  async create(@Body() createUserDto: CreateUserDto) {
+    if (await this.usersService.findByUser(createUserDto.dni.toString())) {
+      throw new BuisnessException('This user is in database');
+    }
+    await this.usersService.create(createUserDto);
+    return {
+      message: 'User created successfully',
+    };
   }
 
   @Get()
-  findAll() {
+  findAll(): string {
     return this.usersService.findAll();
   }
 
