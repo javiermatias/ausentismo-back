@@ -15,12 +15,13 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { ERole } from 'src/auth/role.enum';
 import { BuisnessException } from 'src/utils/buisness.exception';
+import { Public } from 'src/auth/decorators/public.decorator';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Roles(ERole.Admin)
+  @Public()
   @HttpCode(HttpStatus.CREATED)
   @Post()
   async create(@Body() createUserDto: CreateUserDto) {
@@ -32,9 +33,9 @@ export class UsersController {
       message: 'User created successfully',
     };
   }
-
+  @Roles(ERole.Admin)
   @Get()
-  findAll(): string {
+  findAll() {
     return this.usersService.findAll();
   }
 

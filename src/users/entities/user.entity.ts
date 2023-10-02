@@ -2,8 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
-  OneToOne,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Role } from './role.entity';
@@ -38,9 +37,7 @@ export class User {
   createdAt: Date;
 
   // Define the Many-to-One relationship to Role entity
-  @OneToOne(() => Role, {
-    eager: true,
-  })
-  @JoinColumn()
+  // Define the many-to-one relationship with Role
+  @ManyToOne(() => Role, { eager: true })
   role: Role;
 }

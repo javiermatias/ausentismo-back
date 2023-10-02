@@ -20,12 +20,13 @@ export class UsersService {
     const role = await this.roleRepository.findOne({
       where: { roleName: createUserDto.rol },
     });
+    // console.log(role);
 
     const user = {
       ...createUserDto, // Copy fields from sourceObject
       username: createUserDto.dni.toString(),
       password: hashedPassword,
-      role: role || null,
+      role: role,
     };
 
     /*   this.usersRepository
@@ -37,7 +38,7 @@ export class UsersService {
   }
 
   findAll() {
-    return `This action returns all users`;
+    return this.usersRepository.find();
   }
 
   async findByUser(username: string) {
