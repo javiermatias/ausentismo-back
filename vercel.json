@@ -1,12 +1,12 @@
 {
     "version": 2,
     "env": {
-        "HOST": "@HOST", 
-        "USER1": "@USER1",
+        "HOST": "HOST", 
+        "USER1": "USER1",
         "PORT": "3306",
-        "PASSWORD": "@PASSWORD",
-        "DATABASE": "@DATABASE",
-        "SECRET": "@SECRET"
+        "PASSWORD": "PASSWORD",
+        "DATABASE": "DATABASE",
+        "SECRET": "SECRET"
     },
     "builds": [
         {
