@@ -11,15 +11,7 @@
     "builds": [
         {
             "src": "src/main.ts",
-            "use": "@vercel/node",
-            "env": {
-                "HOST": "@HOST", 
-                "USER1": "@USER1",
-                "PORT": "3306",
-                "PASSWORD": "@PASSWORD",
-                "DATABASE": "@DATABASE",
-                "SECRET": "@SECRET"
-            }
+            "use": "@vercel/node"
         }
     ],
     "routes": [
