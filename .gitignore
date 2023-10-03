@@ -37,6 +37,6 @@ lerna-debug.log*
 #Env
 .env
 env.prod
-.env.prod
+.env.prod1
 .vercel
 .env*.local
