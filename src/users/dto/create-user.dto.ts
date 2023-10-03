@@ -1,6 +1,6 @@
 import { Transform } from 'class-transformer';
 import { IsEmail, IsIn, IsInt, IsNotEmpty } from 'class-validator';
-import { ERole } from 'src/auth/role.enum';
+import { ERole } from '../../auth/role.enum';
 
 const roles = Object.values(ERole);
 

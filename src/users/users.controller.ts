@@ -12,10 +12,10 @@ import {
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { Roles } from 'src/auth/decorators/roles.decorator';
-import { ERole } from 'src/auth/role.enum';
-import { BuisnessException } from 'src/utils/buisness.exception';
-import { Public } from 'src/auth/decorators/public.decorator';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { ERole } from '../auth/role.enum';
+import { BuisnessException } from '../utils/buisness.exception';
+import { Public } from '../auth/decorators/public.decorator';
 
 @Controller('users')
 export class UsersController {
