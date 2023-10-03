@@ -16,3 +16,5 @@ async function bootstrap() {
   await app.listen(process.env.PORTAPP);
 }
 bootstrap();
+
+export default bootstrap;

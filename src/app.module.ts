@@ -21,7 +21,7 @@ import { UsersModule } from './users/users.module';
         username: process.env.USER1,
         password: process.env.PASSWORD,
         database: process.env.DATABASE,
-        synchronize: true,
+        synchronize: false,
         autoLoadEntities: true,
       }),
       inject: [ConfigService],
