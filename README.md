@@ -45,6 +45,9 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
+## Vercel Deployment
+verce --prod
+
 ## Test
 
 ```bash

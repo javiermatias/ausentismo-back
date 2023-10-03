@@ -10,8 +10,9 @@ import {
 import { EmpleadoService } from './empleado.service';
 import { CreateEmpleadoDto } from './dto/create-empleado.dto';
 import { UpdateEmpleadoDto } from './dto/update-empleado.dto';
-import { Roles } from 'src/auth/decorators/roles.decorator';
-import { ERole } from 'src/auth/role.enum';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { ERole } from '../auth/role.enum';
+
 //import { Public } from 'src/auth/decorators/public.decorator';
 
 @Controller('empleado')
