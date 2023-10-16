@@ -24,7 +24,7 @@ export class EmpleadoController {
     return this.empleadoService.create(createEmpleadoDto);
   }
 
-  @Roles(ERole.Empleado)
+  @Roles(ERole.Empleado, ERole.Supervisor, ERole.Admin)
   @Get()
   findAll() {
     return this.empleadoService.findAll();

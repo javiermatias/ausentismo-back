@@ -3,9 +3,11 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Role } from './role.entity';
+import { Incidencia } from 'src/empleado/entities/incidencia.entity';
 
 @Entity()
 export class User {
@@ -35,6 +37,9 @@ export class User {
     default: () => 'CURRENT_TIMESTAMP(6)',
   })
   createdAt: Date;
+
+  @OneToMany(() => Incidencia, (incidencia) => incidencia.user)
+  incidencias: Incidencia[];
 
   // Define the Many-to-One relationship to Role entity
   // Define the many-to-one relationship with Role
