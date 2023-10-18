@@ -39,12 +39,6 @@ export class Incidencia {
   @Column({ type: 'boolean', default: false })
   certificado: boolean;
 
-  @CreateDateColumn({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP(6)',
-  })
-  createdAt: Date;
-
   @Column({ type: 'varchar', length: 255, nullable: true })
   nombreImagen: string;
 
@@ -54,6 +48,11 @@ export class Incidencia {
   @Column({ type: 'varchar', length: 255, nullable: true })
   urlImagen: string;
 
+  @CreateDateColumn({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP(6)',
+  })
+  createdAt: Date;
   @ManyToOne(() => User, (user) => user.incidencias)
   user: User;
 }

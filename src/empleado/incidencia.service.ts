@@ -18,18 +18,12 @@ export class IncidenciaService {
     const user = await this.usersRepository.findOne({
       where: { id: createIncidenciaDto.idUser },
     });
-    // console.log(role);
 
     const incidencia = {
       ...createIncidenciaDto, // Copy fields from sourceObject
       user: user,
     };
 
-    /*   this.usersRepository
-      .createQueryBuilder()
-      .insert()
-      .into(User)
-      .values([...user]); */
     return this.incidenciaRepository.save(incidencia);
     //return createIncidenciaDto;
   }

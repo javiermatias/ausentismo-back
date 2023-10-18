@@ -3,19 +3,20 @@ import { UpdateUploadDto } from './dto/update-upload.dto';
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { ConfigService } from '@nestjs/config';
 import { uuid } from 'uuidv4';
+import { iImagen } from 'src/empleado/dto/imagen.interface';
 @Injectable()
 export class UploadService {
   private readonly s3Client = new S3Client({
     region: this.configService.getOrThrow('AWS_S3_REGION'),
     credentials: {
-      accessKeyId: this.configService.getOrThrow('AWS_ACCESS_KEY_ID'),
+      accessKeyId: this.configService.getOrThrow('AWS_ACCESS_KEY_ID1'),
       secretAccessKey: this.configService.getOrThrow('AWS_SECRECT_ACCESS_KEY'),
     },
   });
 
   constructor(private readonly configService: ConfigService) {}
 
-  async upload(originalName: string, file: Buffer) {
+  async upload(originalName: string, file: Buffer): Promise<iImagen> {
     const fileName = `${uuid()}`;
     const encodeFileName = encodeURIComponent(fileName);
     const bucketName = this.configService.get<string>('AWS_BUCKET_NAME');
@@ -29,7 +30,12 @@ export class UploadService {
         ACL: 'public-read',
       }),
     );
-    return `https://${bucketName}.s3.amazonaws.com/${encodeFileName}`;
+    const image: iImagen = {
+      nombreOriginal: originalName,
+      nombreAws: encodeFileName,
+      url: `https://${bucketName}.s3.amazonaws.com/${encodeFileName}`,
+    };
+    return image;
   }
 
   findAll() {

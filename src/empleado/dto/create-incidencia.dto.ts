@@ -1,4 +1,10 @@
-import { IsBoolean, IsEmail, IsNotEmpty, IsOptional } from 'class-validator';
+import {
+  IsBoolean,
+  IsEmail,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+} from 'class-validator';
 
 export class CreateIncidenciaDto {
   @IsNotEmpty()
@@ -23,10 +29,14 @@ export class CreateIncidenciaDto {
   @IsBoolean()
   readonly certificado: boolean;
   @IsNotEmpty()
+  @IsNumber()
   readonly idUser: number;
-  nombreImagen: string;
-  nombreAws: string;
-  urlImagen: string;
+  @IsOptional()
+  readonly nombreImagen: string;
+  @IsOptional()
+  readonly nombreAws: string;
+  @IsOptional()
+  readonly urlImagen: string;
 }
 
 // export interface Incidencia {

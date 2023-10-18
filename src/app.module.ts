@@ -9,6 +9,7 @@ import { UsersModule } from './users/users.module';
 import { UploadModule } from './upload/upload.module';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
+import { SendGridModule } from '@anchan828/nest-sendgrid';
 
 @Module({
   imports: [
@@ -19,13 +20,20 @@ import { APP_GUARD } from '@nestjs/core';
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
         type: 'mysql',
-        host: configService.get('HOST'),
+        host: configService.getOrThrow('HOST'),
         port: 3306,
-        username: configService.get('USER1'),
-        password: configService.get('PASSWORD'),
-        database: configService.get('DATABASE'),
+        username: configService.getOrThrow('USER1'),
+        password: configService.getOrThrow('PASSWORD'),
+        database: configService.getOrThrow('DATABASE'),
         synchronize: true,
         autoLoadEntities: true,
+      }),
+      inject: [ConfigService],
+    }),
+    SendGridModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        apikey: configService.getOrThrow('SENDGRID_API_KEY'),
       }),
       inject: [ConfigService],
     }),

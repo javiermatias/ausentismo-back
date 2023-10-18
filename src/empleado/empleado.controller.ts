@@ -13,21 +13,32 @@ import { UpdateEmpleadoDto } from './dto/update-empleado.dto';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { ERole } from '../auth/role.enum';
 
+import { Public } from 'src/auth/decorators/public.decorator';
+import { EmailService } from './email.service';
+
 //import { Public } from 'src/auth/decorators/public.decorator';
 
 @Controller('empleado')
 export class EmpleadoController {
-  constructor(private readonly empleadoService: EmpleadoService) {}
-
+  constructor(
+    private readonly empleadoService: EmpleadoService,
+    private readonly emailService: EmailService,
+  ) {}
+  @Roles(ERole.Empleado, ERole.Supervisor, ERole.Admin)
   @Post()
   create(@Body() createEmpleadoDto: CreateEmpleadoDto) {
     return this.empleadoService.create(createEmpleadoDto);
   }
-
-  @Roles(ERole.Empleado, ERole.Supervisor, ERole.Admin)
+  @Public()
+  //@Roles(ERole.Empleado, ERole.Supervisor, ERole.Admin)
   @Get()
   findAll() {
-    return this.empleadoService.findAll();
+    return this.emailService.sendEmail(
+      'javierjimenez78',
+      'www.ausentismo.com',
+      'hola desde send grid',
+    );
+    //return this.empleadoService.findAll();
   }
 
   @Get(':id')

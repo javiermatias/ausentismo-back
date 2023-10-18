@@ -3,9 +3,6 @@ import {
   //   Get,
   Post,
   Body,
-  UseInterceptors,
-  UploadedFile,
-  ParseFilePipe,
   /*   Patch,
   Param,
   Delete, */
@@ -15,47 +12,16 @@ import { Roles } from '../auth/decorators/roles.decorator';
 import { ERole } from '../auth/role.enum';
 import { IncidenciaService } from './incidencia.service';
 import { CreateIncidenciaDto } from './dto/create-incidencia.dto';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { UploadService } from './upload.service';
 
 //import { Public } from 'src/auth/decorators/public.decorator';
 
 @Controller('incidencia')
 export class IncidenciaController {
-  constructor(
-    private readonly incidenciaService: IncidenciaService,
-    private readonly uploadService: UploadService,
-  ) {}
+  constructor(private readonly incidenciaService: IncidenciaService) {}
 
   @Roles(ERole.Empleado, ERole.Supervisor, ERole.Admin)
   @Post()
-  @UseInterceptors(FileInterceptor('file'))
-  async create(
-    @UploadedFile(
-      new ParseFilePipe({
-        validators: [
-          // new MaxFileSizeValidator({ maxSize: 1000 }),
-          // new FileTypeValidator({ fileType: 'image/jpeg' }),
-        ],
-      }),
-    )
-    file: Express.Multer.File,
-    @Body() createIncidenciaDto: CreateIncidenciaDto,
-  ) {
-    try {
-      if (file) {
-        const image = await this.uploadService.upload(
-          file.originalname,
-          file.buffer,
-        );
-        createIncidenciaDto.nombreImagen = image.nombreOriginal;
-        createIncidenciaDto.nombreAws = image.nombreAws;
-        createIncidenciaDto.urlImagen = image.url;
-      }
-    } catch (error) {
-      console.log(error);
-    }
-
+  async create(@Body() createIncidenciaDto: CreateIncidenciaDto) {
     const incidencia = await this.incidenciaService.create(createIncidenciaDto);
     return {
       value: incidencia.id,

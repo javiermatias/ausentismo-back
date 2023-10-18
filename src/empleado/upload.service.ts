@@ -8,7 +8,7 @@ export class UploadService {
   private readonly s3Client = new S3Client({
     region: this.configService.getOrThrow('AWS_S3_REGION'),
     credentials: {
-      accessKeyId: this.configService.getOrThrow('AWS_ACCESS_KEY_ID'),
+      accessKeyId: this.configService.getOrThrow('AWS_ACCESS_KEY_ID1'),
       secretAccessKey: this.configService.getOrThrow('AWS_SECRECT_ACCESS_KEY'),
     },
   });
