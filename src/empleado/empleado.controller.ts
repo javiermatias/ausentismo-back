@@ -13,7 +13,7 @@ import { UpdateEmpleadoDto } from './dto/update-empleado.dto';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { ERole } from '../auth/role.enum';
 
-import { Public } from 'src/auth/decorators/public.decorator';
+//import { Public } from 'src/auth/decorators/public.decorator';
 import { EmailService } from './email.service';
 
 //import { Public } from 'src/auth/decorators/public.decorator';
@@ -29,16 +29,16 @@ export class EmpleadoController {
   create(@Body() createEmpleadoDto: CreateEmpleadoDto) {
     return this.empleadoService.create(createEmpleadoDto);
   }
-  @Public()
-  //@Roles(ERole.Empleado, ERole.Supervisor, ERole.Admin)
+
+  @Roles(ERole.Empleado, ERole.Supervisor, ERole.Admin)
   @Get()
   findAll() {
-    return this.emailService.sendEmail(
+    /*return this.emailService.sendEmail(
       'javierjimenez78',
       'www.ausentismo.com',
       'hola desde send grid',
-    );
-    //return this.empleadoService.findAll();
+    ); */
+    return this.empleadoService.findAll();
   }
 
   @Get(':id')

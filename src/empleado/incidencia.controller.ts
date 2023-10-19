@@ -12,17 +12,27 @@ import { Roles } from '../auth/decorators/roles.decorator';
 import { ERole } from '../auth/role.enum';
 import { IncidenciaService } from './incidencia.service';
 import { CreateIncidenciaDto } from './dto/create-incidencia.dto';
+import { EmailService } from './email.service';
 
 //import { Public } from 'src/auth/decorators/public.decorator';
 
 @Controller('incidencia')
 export class IncidenciaController {
-  constructor(private readonly incidenciaService: IncidenciaService) {}
+  constructor(
+    private readonly incidenciaService: IncidenciaService,
+    private readonly emailService: EmailService,
+  ) {}
 
   @Roles(ERole.Empleado, ERole.Supervisor, ERole.Admin)
   @Post()
   async create(@Body() createIncidenciaDto: CreateIncidenciaDto) {
     const incidencia = await this.incidenciaService.create(createIncidenciaDto);
+    console.log(incidencia);
+    const email = await this.emailService.sendEmail(
+      'javierjimenez78@gmail.com',
+      incidencia,
+    );
+    console.log(email);
     return {
       value: incidencia.id,
       message: 'Incidencia fue creada exitosamente',
