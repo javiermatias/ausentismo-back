@@ -7,10 +7,10 @@ import { iImagen } from 'src/empleado/dto/imagen.interface';
 @Injectable()
 export class UploadService {
   private readonly s3Client = new S3Client({
-    region: this.configService.getOrThrow('AWS_S3_REGION'),
+    region: this.configService.getOrThrow('AWS_S3_REGION1'),
     credentials: {
       accessKeyId: this.configService.getOrThrow('AWS_ACCESS_KEY_ID1'),
-      secretAccessKey: this.configService.getOrThrow('AWS_SECRECT_ACCESS_KEY'),
+      secretAccessKey: this.configService.getOrThrow('AWS_SECRECT_ACCESS_KEY1'),
     },
   });
 
@@ -19,7 +19,7 @@ export class UploadService {
   async upload(originalName: string, file: Buffer): Promise<iImagen> {
     const fileName = `${uuid()}`;
     const encodeFileName = encodeURIComponent(fileName);
-    const bucketName = this.configService.get<string>('AWS_BUCKET_NAME');
+    const bucketName = this.configService.get<string>('AWS_BUCKET_NAME1');
     console.log(encodeFileName);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const file_upload = await this.s3Client.send(
