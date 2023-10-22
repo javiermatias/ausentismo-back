@@ -18,7 +18,7 @@ export class UploadService {
   async upload(originalName: string, file: Buffer): Promise<iImagen> {
     const fileName = `${uuid()}`;
     const encodeFileName = encodeURIComponent(fileName);
-    const bucketName = this.configService.get<string>('AWS_BUCKET_NAME');
+    const bucketName = this.configService.get<string>('AWS_BUCKET_NAME1');
     console.log(encodeFileName);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const file_upload = await this.s3Client.send(
