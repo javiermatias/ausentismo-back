@@ -27,12 +27,12 @@ export class IncidenciaController {
   @Post()
   async create(@Body() createIncidenciaDto: CreateIncidenciaDto) {
     const incidencia = await this.incidenciaService.create(createIncidenciaDto);
-    console.log(incidencia);
+    //console.log(incidencia);
     const email = await this.emailService.sendEmailIncidencia(
       'javierjimenez78@gmail.com',
       incidencia,
     );
-    console.log(email);
+    //console.log(email);
     return {
       value: incidencia.id,
       message: 'Incidencia fue creada exitosamente',
