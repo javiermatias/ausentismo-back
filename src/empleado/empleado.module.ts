@@ -8,10 +8,18 @@ import { IncidenciaController } from './incidencia.controller';
 import { User } from 'src/users/entities/user.entity';
 import { UploadService } from './upload.service';
 import { EmailService } from './email.service';
+import { IncidenciaNoService } from './incidenciaNo.service';
+import { IncidenciaNo } from './entities/incidenciaNo.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Incidencia, User])],
+  imports: [TypeOrmModule.forFeature([Incidencia, IncidenciaNo, User])],
   controllers: [EmpleadoController, IncidenciaController],
-  providers: [EmpleadoService, IncidenciaService, UploadService, EmailService],
+  providers: [
+    EmpleadoService,
+    IncidenciaService,
+    IncidenciaNoService,
+    UploadService,
+    EmailService,
+  ],
 })
 export class EmpleadoModule {}
