@@ -27,7 +27,7 @@ export class IncidenciaController {
   @Post()
   async create(@Body() createIncidenciaDto: CreateIncidenciaDto) {
     const incidencia = await this.incidenciaService.create(createIncidenciaDto);
-    //console.log(incidencia);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const email = await this.emailService.sendEmailIncidencia(
       'javierjimenez78@gmail.com',
       incidencia,

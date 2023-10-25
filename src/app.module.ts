@@ -10,6 +10,7 @@ import { UploadModule } from './upload/upload.module';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import { SendGridModule } from '@anchan828/nest-sendgrid';
+import { EmpresaModule } from './empresa/empresa.module';
 
 @Module({
   imports: [
@@ -47,6 +48,7 @@ import { SendGridModule } from '@anchan828/nest-sendgrid';
     AuthModule,
     UsersModule,
     UploadModule,
+    EmpresaModule,
   ],
   controllers: [AppController],
   providers: [
