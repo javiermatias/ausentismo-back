@@ -12,7 +12,7 @@ export class Empresa {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'varchar', length: 255, unique: true, nullable: false })
+  @Column({ type: 'varchar', length: 255, nullable: false })
   nombre: string;
 
   @Column({ type: 'varchar', length: 255, nullable: false })
