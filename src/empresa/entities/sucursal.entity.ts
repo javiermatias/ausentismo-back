@@ -6,6 +6,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Empresa } from './empresa.entity';
+import { Localidad } from './localidad.entity';
 
 @Entity()
 export class Sucursal {
@@ -22,4 +23,7 @@ export class Sucursal {
   createdAt: Date;
   @ManyToOne(() => Empresa, (empresa) => empresa.sucursales)
   empresa: Empresa;
+
+  @ManyToOne(() => Localidad, (localidad) => localidad.sucursales)
+  localidad: Localidad;
 }

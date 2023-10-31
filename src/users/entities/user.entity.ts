@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import { Role } from './role.entity';
 import { Incidencia } from 'src/empleado/entities/incidencia.entity';
+import { Empresa } from 'src/empresa/entities/empresa.entity';
 
 @Entity()
 export class User {
@@ -45,4 +46,9 @@ export class User {
   // Define the many-to-one relationship with Role
   @ManyToOne(() => Role, { eager: true })
   role: Role;
+
+  // Define the Many-to-One relationship to Role entity
+  // Define the many-to-one relationship with Role
+  @ManyToOne(() => Empresa, { eager: true })
+  empresa: Empresa;
 }
