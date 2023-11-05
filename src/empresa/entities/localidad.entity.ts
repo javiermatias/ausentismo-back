@@ -7,10 +7,7 @@ export class Localidad {
   id: number;
 
   @Column()
-  nombreLocalidad: string;
-
-  @Column()
-  direccionLocalidad: string;
+  nombre: string;
 
   @OneToMany(() => Sucursal, (sucursal) => sucursal.localidad)
   sucursales: Sucursal[];
