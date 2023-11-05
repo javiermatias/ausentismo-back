@@ -6,6 +6,8 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
+  Req,
 } from '@nestjs/common';
 import { EmpleadoService } from './empleado.service';
 import { CreateEmpleadoDto } from './dto/create-empleado.dto';
@@ -15,6 +17,7 @@ import { ERole } from '../auth/role.enum';
 
 //import { Public } from 'src/auth/decorators/public.decorator';
 import { EmailService } from './email.service';
+import { UserDto } from './dto/auth.user.dto';
 
 //import { Public } from 'src/auth/decorators/public.decorator';
 
@@ -30,15 +33,30 @@ export class EmpleadoController {
     return this.empleadoService.create(createEmpleadoDto);
   }
 
-  @Roles(ERole.Empleado, ERole.Supervisor, ERole.Admin)
+  @Roles(ERole.Admin)
   @Get()
-  findAll() {
+  findAll(
+    @Query('page') page: number = 1, // Default to page 1
+    @Query('limit') limit: number = 500,
+    @Req() req: Request, // Default to limit 10
+  ) {
     /*return this.emailService.sendEmail(
       'javierjimenez78',
       'www.ausentismo.com',
       'hola desde send grid',
     ); */
-    return this.empleadoService.findAll();
+    const user: UserDto = req['user'];
+
+    return this.empleadoService.findAll(page, limit, user);
+  }
+  @Roles(ERole.Admin)
+  @Get('find')
+  search(@Query('query') query: string) {
+    // Implement your search logic here using the 'query' parameter.
+    // You can access the query parameter as 'http://example.com/search?query=mysearchterm'
+    // In this example, 'query' will contain 'mysearchterm'.
+    // Perform your search operation and return the results.
+    return `Searching for: ${query}`;
   }
 
   @Get(':id')
