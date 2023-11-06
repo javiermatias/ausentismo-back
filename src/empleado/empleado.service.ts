@@ -21,7 +21,7 @@ export class EmpleadoService {
 
   async findAll(page: number, limit: number, user: UserDto) {
     const skip = (page - 1) * limit;
-    console.log('limit ' + limit);
+    const rowCount = await this.usersRepository.count();
 
     const users = await this.dataSource
       .createQueryBuilder(User, 'user')
@@ -55,7 +55,7 @@ export class EmpleadoService {
     return {
       page,
       limit,
-      total: users.length,
+      total: rowCount,
       data: users,
     };
   }

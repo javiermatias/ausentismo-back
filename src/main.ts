@@ -11,6 +11,7 @@ async function bootstrap() {
     new ValidationPipe({
       whitelist: true, //If set to true, validator will strip validated (returned) object of any properties that do not use any validation decorators.
       transform: true,
+      transformOptions: { enableImplicitConversion: true },
     }),
   );
   await app.listen(process.env.PORTAPP || 3001);

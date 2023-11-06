@@ -64,8 +64,22 @@ export class EmpresaService {
     return empresa;
   } */
 
-  findAll() {
-    return this.empresaRepository.find();
+  async findAll(page: number, limit: number) {
+    const skip = (page - 1) * limit;
+    const rowCount = await this.empresaRepository.count();
+
+    const empresas = await this.empresaRepository
+      .createQueryBuilder('empresa')
+      .take(limit) // limits it to 4
+      .skip(skip) // offset 5 entities
+      .getMany();
+
+    return {
+      page,
+      limit,
+      total: rowCount,
+      data: empresas,
+    };
   }
 
   findOne(id: number) {
