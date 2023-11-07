@@ -7,6 +7,7 @@ import { User } from 'src/users/entities/user.entity';
 import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
 import { UserDto } from './dto/auth.user.dto';
+import { Pagination } from 'src/utils/pagination';
 
 @Injectable()
 export class EmpleadoService {
@@ -19,8 +20,8 @@ export class EmpleadoService {
     return 'This action adds a new empleado';
   }
 
-  async findAll(page: number, limit: number, user: UserDto) {
-    const skip = (page - 1) * limit;
+  async findAll(pagination: Pagination, user: UserDto) {
+    const skip = (pagination.page - 1) * pagination.limit;
     const rowCount = await this.usersRepository.count();
 
     const users = await this.dataSource
@@ -37,7 +38,7 @@ export class EmpleadoService {
       .where('role.roleName = :roleName', { roleName: 'empleado' })
       .andWhere('empresa.id = :empresaId', { empresaId: user.empresaId }) // Replace 1079 with the desired empresa ID
       .offset(skip)
-      .limit(limit)
+      .limit(pagination.limit)
       .getRawMany();
 
     console.log(users);
@@ -53,8 +54,8 @@ export class EmpleadoService {
     }); */
 
     return {
-      page,
-      limit,
+      page: pagination.page,
+      limit: pagination.limit,
       total: rowCount,
       data: users,
     };

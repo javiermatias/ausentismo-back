@@ -29,7 +29,7 @@ export class EmpresaController {
   findAll(@Query() pagination: Pagination) {
     console.log('Page' + pagination.page);
     console.log('Limit' + pagination.limit);
-    return this.empresaService.findAll(pagination.page, pagination.limit);
+    return this.empresaService.findAll(pagination);
   }
 
   @Get(':id')

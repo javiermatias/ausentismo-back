@@ -8,6 +8,8 @@ import {
   Delete,
   Query,
   Req,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { EmpleadoService } from './empleado.service';
 import { CreateEmpleadoDto } from './dto/create-empleado.dto';
@@ -18,6 +20,7 @@ import { ERole } from '../auth/role.enum';
 //import { Public } from 'src/auth/decorators/public.decorator';
 import { EmailService } from './email.service';
 import { UserDto } from './dto/auth.user.dto';
+import { Pagination } from 'src/utils/pagination';
 
 //import { Public } from 'src/auth/decorators/public.decorator';
 
@@ -35,9 +38,9 @@ export class EmpleadoController {
 
   @Roles(ERole.Admin)
   @Get()
+  @UsePipes(new ValidationPipe({ transform: true }))
   findAll(
-    @Query('page') page: number = 1, // Default to page 1
-    @Query('limit') limit: number = 500,
+    @Query() pagination: Pagination,
     @Req() req: Request, // Default to limit 10
   ) {
     /*return this.emailService.sendEmail(
@@ -47,7 +50,7 @@ export class EmpleadoController {
     ); */
     const user: UserDto = req['user'];
 
-    return this.empleadoService.findAll(page, limit, user);
+    return this.empleadoService.findAll(pagination, user);
   }
   @Roles(ERole.Admin)
   @Get('find')

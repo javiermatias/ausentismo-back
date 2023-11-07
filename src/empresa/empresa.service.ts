@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import { Empresa } from './entities/empresa.entity';
 import { Localidad } from './entities/localidad.entity';
 import { Sucursal } from './entities/sucursal.entity';
+import { Pagination } from 'src/utils/pagination';
 
 @Injectable()
 export class EmpresaService {
@@ -45,38 +46,22 @@ export class EmpresaService {
       },
     );
   }
-
-  /*   async create(createEmpresaDto: CreateEmpresaDto) {
-    const empresa = await this.empresaRepository.save(createEmpresaDto);
-
-    for (const localidad of createEmpresaDto.localidades) {
-      const localidadS = await this.localidadRepository.save(localidad);
-      for (const sucursal of localidad.sucursales) {
-        const sucursalDto = {
-          nombre: sucursal.nombre,
-          empresa: empresa,
-          localidad: localidadS,
-        };
-        const sucursalS = await this.sucursalRepository.save(sucursalDto);
-      }
-    }
-
-    return empresa;
-  } */
-
-  async findAll(page: number, limit: number) {
-    const skip = (page - 1) * limit;
+  async findAll(pagination: Pagination) {
+    const skip = (pagination.page - 1) * pagination.limit;
     const rowCount = await this.empresaRepository.count();
 
     const empresas = await this.empresaRepository
       .createQueryBuilder('empresa')
-      .take(limit) // limits it to 4
+      .where('empresa.nombre LIKE :nombre', {
+        nombre: `%${pagination.search}%`,
+      })
+      .take(pagination.limit) // limits it to 4
       .skip(skip) // offset 5 entities
       .getMany();
 
     return {
-      page,
-      limit,
+      page: pagination.page,
+      limit: pagination.limit,
       total: rowCount,
       data: empresas,
     };
