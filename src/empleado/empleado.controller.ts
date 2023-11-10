@@ -30,24 +30,19 @@ export class EmpleadoController {
     private readonly empleadoService: EmpleadoService,
     private readonly emailService: EmailService,
   ) {}
-  @Roles(ERole.Empleado, ERole.Supervisor, ERole.Admin)
+  @Roles(ERole.Admin, ERole.RRHH)
   @Post()
   create(@Body() createEmpleadoDto: CreateEmpleadoDto) {
     return this.empleadoService.create(createEmpleadoDto);
   }
 
-  @Roles(ERole.Admin)
+  @Roles(ERole.Admin, ERole.RRHH)
   @Get()
   @UsePipes(new ValidationPipe({ transform: true }))
   findAll(
     @Query() pagination: Pagination,
     @Req() req: Request, // Default to limit 10
   ) {
-    /*return this.emailService.sendEmail(
-      'javierjimenez78',
-      'www.ausentismo.com',
-      'hola desde send grid',
-    ); */
     const user: UserDto = req['user'];
 
     return this.empleadoService.findAll(pagination, user);

@@ -2,12 +2,12 @@
 import { Injectable } from '@nestjs/common';
 import { CreateEmpleadoDto } from './dto/create-empleado.dto';
 import { UpdateEmpleadoDto } from './dto/update-empleado.dto';
-import { Empleado } from './entities/empleado.entity';
 import { User } from 'src/users/entities/user.entity';
 import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
 import { UserDto } from './dto/auth.user.dto';
 import { Pagination } from 'src/utils/pagination';
+import { Empleado } from './entities/empleado.entity';
 
 @Injectable()
 export class EmpleadoService {
@@ -29,17 +29,23 @@ export class EmpleadoService {
       .select([
         'user.id as id',
         'user.dni as dni',
+        'user.firstname as nombre',
+        'user.lastname as apellido',
         'user.email as email',
-        'user.firstname as firstname',
-        'user.lastname as lastname',
       ])
       .innerJoin('user.role', 'role') // Join the 'role' relationship
       .innerJoin('user.empresa', 'empresa') // Join the 'empresa' relationship
       .where('role.roleName = :roleName', { roleName: 'empleado' })
       .andWhere('empresa.id = :empresaId', { empresaId: user.empresaId }) // Replace 1079 with the desired empresa ID
+      .andWhere(
+        'user.firstname LIKE :nombre OR user.lastname LIKE :nombre OR user.dni LIKE :nombre',
+        {
+          nombre: `%${pagination.search}%`,
+        },
+      )
       .offset(skip)
       .limit(pagination.limit)
-      .getRawMany();
+      .getRawMany<Empleado>();
 
     console.log(users);
 
