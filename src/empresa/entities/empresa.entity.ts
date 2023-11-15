@@ -6,6 +6,8 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Sucursal } from './sucursal.entity';
+import { Localidad } from './localidad.entity';
+import { Provincia } from './provincia.entity';
 
 @Entity()
 export class Empresa {
@@ -26,4 +28,10 @@ export class Empresa {
 
   @OneToMany(() => Sucursal, (sucursal) => sucursal.empresa)
   sucursales: Sucursal[];
+
+  @OneToMany(() => Localidad, (localidad) => localidad.empresa)
+  localidades: Localidad[];
+
+  @OneToMany(() => Provincia, (provincia) => provincia.empresa)
+  provincias: Provincia[];
 }

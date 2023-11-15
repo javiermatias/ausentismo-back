@@ -27,8 +27,6 @@ export class EmpresaController {
   @Get()
   @UsePipes(new ValidationPipe({ transform: true }))
   findAll(@Query() pagination: Pagination) {
-    console.log('Page' + pagination.page);
-    console.log('Limit' + pagination.limit);
     return this.empresaService.findAll(pagination);
   }
 
