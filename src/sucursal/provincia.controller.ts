@@ -1,5 +1,6 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Req } from '@nestjs/common';
 import { SucursalService } from './sucursal.service';
+import { UserDto } from 'src/empleado/dto/auth.user.dto';
 
 @Controller('provincia')
 export class ProvinciaController {
@@ -10,9 +11,10 @@ export class ProvinciaController {
         return this.sucursalService.create(createSucursalDto);
       }
      */
-  @Get(':id')
-  findAll(@Param('id') empresaId: number) {
-    return this.sucursalService.findAllProvincia(empresaId);
+  @Get()
+  findAll(@Req() req: Request) {
+    const user: UserDto = req['user'];
+    return this.sucursalService.findAllProvincia(user.empresaId);
   }
 
   /*     @Get(':id')

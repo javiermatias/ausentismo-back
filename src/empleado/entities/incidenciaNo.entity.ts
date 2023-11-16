@@ -1,3 +1,4 @@
+import { Sucursal } from 'src/empresa/entities/sucursal.entity';
 import { User } from 'src/users/entities/user.entity';
 import {
   Column,
@@ -27,6 +28,9 @@ export class IncidenciaNo {
   @Column({ type: 'varchar', length: 1000 })
   motivo: string;
 
+  @Column({ type: 'varchar', length: 1000 })
+  nombreSucursal: string;
+
   @Column({ type: 'boolean', default: false })
   certificado: boolean;
 
@@ -46,4 +50,7 @@ export class IncidenciaNo {
   createdAt: Date;
   @ManyToOne(() => User, (user) => user.incidencias)
   user: User;
+
+  @ManyToOne(() => Sucursal, (sucursal) => sucursal.incidenciasNo)
+  sucursal: Sucursal;
 }

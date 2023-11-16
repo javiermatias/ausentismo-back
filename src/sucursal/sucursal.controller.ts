@@ -21,12 +21,11 @@ export class SucursalController {
     return this.sucursalService.create(createSucursalDto);
   }
 
-  @Get(':localidadId/:empresaId')
+  @Get(':localidadId')
   async findAll(
     @Param('localidadId') localidadId: number,
-    @Param('empresaId') empresaId: number,
   ): Promise<Sucursal[]> {
-    return this.sucursalService.findAll(localidadId, empresaId);
+    return this.sucursalService.findAll(localidadId);
   }
 
   @Get(':id')

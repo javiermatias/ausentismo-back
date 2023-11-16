@@ -1,3 +1,4 @@
+import { Sucursal } from 'src/empresa/entities/sucursal.entity';
 import { User } from 'src/users/entities/user.entity';
 import {
   Column,
@@ -21,6 +22,9 @@ export class Incidencia {
   @Column({ type: 'varchar', length: 100, nullable: true })
   legajo: string;
 
+  @Column({ type: 'varchar', length: 100 })
+  direccion: string;
+
   @Column({ type: 'varchar', length: 25 })
   celular: string;
 
@@ -32,6 +36,9 @@ export class Incidencia {
 
   @Column({ type: 'varchar', length: 1000 })
   medicacion: string;
+
+  @Column({ type: 'varchar', length: 1000 })
+  nombreSucursal: string;
 
   @Column({ type: 'boolean', default: false })
   asistencia: boolean;
@@ -55,6 +62,9 @@ export class Incidencia {
   createdAt: Date;
   @ManyToOne(() => User, (user) => user.incidencias)
   user: User;
+
+  @ManyToOne(() => Sucursal, (sucursal) => sucursal.incidencias)
+  sucursal: Sucursal;
 }
 
 // export interface Incidencia {

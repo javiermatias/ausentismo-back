@@ -11,9 +11,12 @@ import { EmailService } from './email.service';
 import { IncidenciaNoService } from './incidenciaNo.service';
 import { IncidenciaNo } from './entities/incidenciaNo.entity';
 import { IncidenciaNoController } from './incidenciaNo.controller';
+import { Sucursal } from 'src/empresa/entities/sucursal.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Incidencia, IncidenciaNo, User])],
+  imports: [
+    TypeOrmModule.forFeature([Incidencia, IncidenciaNo, User, Sucursal]),
+  ],
   controllers: [
     EmpleadoController,
     IncidenciaController,

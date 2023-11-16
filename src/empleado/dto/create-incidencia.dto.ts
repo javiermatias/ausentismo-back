@@ -15,6 +15,8 @@ export class CreateIncidenciaDto {
   @IsOptional()
   readonly legajo: string;
   @IsNotEmpty()
+  readonly direccion: string;
+  @IsNotEmpty()
   readonly celular: string;
   @IsNotEmpty()
   readonly enfermedad: string;
@@ -31,6 +33,9 @@ export class CreateIncidenciaDto {
   @IsNotEmpty()
   @IsNumber()
   readonly idUser: number;
+  @IsNotEmpty()
+  @IsNumber()
+  readonly idSucursal: number;
   @IsOptional()
   readonly nombreImagen: string;
   @IsOptional()

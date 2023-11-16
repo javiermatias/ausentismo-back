@@ -71,6 +71,7 @@ export class EmpresaService {
     return `This action returns a #${id} empresa`;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   update(id: number, updateEmpresaDto: UpdateEmpresaDto) {
     return `This action updates a #${id} empresa`;
   }

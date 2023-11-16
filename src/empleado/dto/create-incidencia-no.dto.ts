@@ -17,6 +17,8 @@ export class CreateIncidenciaNoDto {
   @IsNotEmpty()
   readonly celular: string;
   @IsNotEmpty()
+  readonly direccion: string;
+  @IsNotEmpty()
   readonly motivo: string;
   @IsNotEmpty()
   @IsBoolean()
@@ -24,6 +26,9 @@ export class CreateIncidenciaNoDto {
   @IsNotEmpty()
   @IsNumber()
   readonly idUser: number;
+  @IsNotEmpty()
+  @IsNumber()
+  readonly idSucursal: number;
   @IsOptional()
   readonly nombreImagen: string;
   @IsOptional()

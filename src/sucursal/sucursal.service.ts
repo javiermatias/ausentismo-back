@@ -22,13 +22,11 @@ export class SucursalService {
     return 'This action adds a new sucursal';
   }
 
-  async findAll(localidadId: number, empresaId: number): Promise<Sucursal[]> {
+  async findAll(localidadId: number): Promise<Sucursal[]> {
     return this.sucursalRepository.find({
       where: {
         localidad: { id: localidadId },
-        empresa: { id: empresaId },
       },
-      select: ['nombre'],
     });
   }
 

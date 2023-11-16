@@ -3,10 +3,13 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Empresa } from './empresa.entity';
 import { Localidad } from './localidad.entity';
+import { Incidencia } from 'src/empleado/entities/incidencia.entity';
+import { IncidenciaNo } from 'src/empleado/entities/incidenciaNo.entity';
 
 @Entity()
 export class Sucursal {
@@ -29,4 +32,10 @@ export class Sucursal {
 
   @ManyToOne(() => Localidad, (localidad) => localidad.sucursales)
   localidad: Localidad;
+
+  @OneToMany(() => Incidencia, (incidencia) => incidencia.sucursal)
+  incidencias: Incidencia[];
+
+  @OneToMany(() => IncidenciaNo, (incidenciaNo) => incidenciaNo.sucursal)
+  incidenciasNo: IncidenciaNo[];
 }
