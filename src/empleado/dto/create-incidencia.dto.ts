@@ -36,6 +36,8 @@ export class CreateIncidenciaDto {
   @IsNotEmpty()
   @IsNumber()
   readonly idSucursal: number;
+  @IsNotEmpty()
+  readonly nombreSucursal: string;
   @IsOptional()
   readonly nombreImagen: string;
   @IsOptional()

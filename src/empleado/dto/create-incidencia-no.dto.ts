@@ -29,6 +29,8 @@ export class CreateIncidenciaNoDto {
   @IsNotEmpty()
   @IsNumber()
   readonly idSucursal: number;
+  @IsNotEmpty()
+  readonly nombreSucursal: string;
   @IsOptional()
   readonly nombreImagen: string;
   @IsOptional()

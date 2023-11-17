@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
 import { Incidencia } from './entities/incidencia.entity';
+import { Sucursal } from 'src/empresa/entities/sucursal.entity';
 
 @Injectable()
 export class IncidenciaService {
@@ -13,15 +14,21 @@ export class IncidenciaService {
     private usersRepository: Repository<User>,
     @InjectRepository(Incidencia)
     private incidenciaRepository: Repository<Incidencia>,
+    @InjectRepository(Sucursal)
+    private sucursalRepository: Repository<Sucursal>,
   ) {}
   async create(createIncidenciaDto: CreateIncidenciaDto) {
     const user = await this.usersRepository.findOne({
       where: { id: createIncidenciaDto.idUser },
     });
+    const sucursal = await this.sucursalRepository.findOne({
+      where: { id: createIncidenciaDto.idSucursal },
+    });
 
     const incidencia = {
       ...createIncidenciaDto, // Copy fields from sourceObject
       user: user,
+      sucursal: sucursal,
     };
 
     return this.incidenciaRepository.save(incidencia);
