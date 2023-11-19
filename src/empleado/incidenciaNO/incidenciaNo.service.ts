@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Injectable } from '@nestjs/common';
-import { CreateIncidenciaDto } from './dto/create-incidencia.dto';
+import { CreateIncidenciaDto } from '../dto/create-incidencia.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
-import { IncidenciaNo } from './entities/incidenciaNo.entity';
-import { CreateIncidenciaNoDto } from './dto/create-incidencia-no.dto';
+import { IncidenciaNo } from '../entities/incidenciaNo.entity';
+import { CreateIncidenciaNoDto } from '../dto/create-incidencia-no.dto';
 import { Sucursal } from 'src/empresa/entities/sucursal.entity';
 
 @Injectable()

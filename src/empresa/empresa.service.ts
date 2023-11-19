@@ -55,8 +55,8 @@ export class EmpresaService {
       .where('empresa.nombre LIKE :nombre', {
         nombre: `%${pagination.search}%`,
       })
-      .take(pagination.limit) // limits it to 4
-      .skip(skip) // offset 5 entities
+      .take(pagination.limit) // limits it to X
+      .skip(skip) // offset X entities
       .getMany();
 
     return {

@@ -8,11 +8,11 @@ import {
   Delete, */
 } from '@nestjs/common';
 //import { UpdateEmpleadoDto } from './dto/update-empleado.dto';
-import { Roles } from '../auth/decorators/roles.decorator';
-import { ERole } from '../auth/role.enum';
+import { Roles } from '../../auth/decorators/roles.decorator';
+import { ERole } from '../../auth/role.enum';
 import { IncidenciaService } from './incidencia.service';
-import { CreateIncidenciaDto } from './dto/create-incidencia.dto';
-import { EmailService } from './email.service';
+import { CreateIncidenciaDto } from '../dto/create-incidencia.dto';
+import { EmailService } from '../email.service';
 
 //import { Public } from 'src/auth/decorators/public.decorator';
 

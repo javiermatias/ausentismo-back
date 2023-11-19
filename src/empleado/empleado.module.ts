@@ -3,15 +3,17 @@ import { EmpleadoService } from './empleado.service';
 import { EmpleadoController } from './empleado.controller';
 import { Incidencia } from './entities/incidencia.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { IncidenciaService } from './incidencia.service';
-import { IncidenciaController } from './incidencia.controller';
+import { IncidenciaService } from './incidencia/incidencia.service';
 import { User } from 'src/users/entities/user.entity';
 import { UploadService } from './upload.service';
 import { EmailService } from './email.service';
-import { IncidenciaNoService } from './incidenciaNo.service';
+import { IncidenciaNoService } from './incidenciaNO/incidenciaNo.service';
 import { IncidenciaNo } from './entities/incidenciaNo.entity';
-import { IncidenciaNoController } from './incidenciaNo.controller';
+import { IncidenciaNoController } from './incidenciaNO/incidenciaNo.controller';
 import { Sucursal } from 'src/empresa/entities/sucursal.entity';
+import { IncidenciasController } from './incidencias/incidencias.controller';
+import { IncidenciaController } from './incidencia/incidencia.controller';
+import { IncidenciasService } from './incidencias/incidencias.service';
 
 @Module({
   imports: [
@@ -21,11 +23,13 @@ import { Sucursal } from 'src/empresa/entities/sucursal.entity';
     EmpleadoController,
     IncidenciaController,
     IncidenciaNoController,
+    IncidenciasController,
   ],
   providers: [
     EmpleadoService,
     IncidenciaService,
     IncidenciaNoService,
+    IncidenciasService,
     UploadService,
     EmailService,
   ],
