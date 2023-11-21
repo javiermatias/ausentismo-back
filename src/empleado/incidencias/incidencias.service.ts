@@ -12,53 +12,56 @@ import { IncidenciaNo } from '../entities/incidenciaNo.entity';
 @Injectable()
 export class IncidenciasService {
   constructor(
-    @InjectRepository(User)
-    private usersRepository: Repository<User>,
     @InjectRepository(Incidencia)
     private incidenciaRepository: Repository<Incidencia>,
     @InjectRepository(IncidenciaNo)
     private incidenciaRepositoryNo: Repository<IncidenciaNo>,
-    @InjectRepository(Sucursal)
-    private sucursalRepository: Repository<Sucursal>,
   ) {}
 
   async findAll(pagination: Pagination) {
     const offset = (pagination.page - 1) * pagination.limit;
+    console.log(offset);
+    console.log(pagination.limit);
     const rowIncidencia = await this.incidenciaRepository.count();
     const rowIncidenciaNo = await this.incidenciaRepositoryNo.count();
     const total = rowIncidencia + rowIncidenciaNo;
-    const incidenciaAll = this.incidenciaRepository.query(
+    const incidenciaAll = await this.incidenciaRepository.query(
       `
-    SELECT 
+      SELECT
       inc.createdAt,
       u1.id AS userId,
-      CONCAT(u1.nombre, ' ', u1.apellido) AS Empleado,
+      CONCAT(u1.firstname, ' ', u1.lastname) AS Empleado,
       'Enfermedad' AS tipo,
-      inc.Enfermedad AS otros
-    FROM 
-      Incidencia inc
-    LEFT JOIN 
-      User u1 ON inc.userId = u1.id
+      s.nombre AS Sucursal
+    FROM
+      incidencia inc
+    LEFT JOIN
+      user u1 ON inc.userId = u1.id
+	LEFT JOIN
+      sucursal s ON inc.sucursalId = s.id
 
     UNION ALL
 
-    SELECT 
+    SELECT
       incNO.createdAt,
       u2.id AS userId,
-      CONCAT(u2.nombre, ' ', u2.apellido) AS Empleado,
+      CONCAT(u2.firstname, ' ', u2.lastname) AS Empleado,
       'Otros' AS tipo,
-      incNO.Otros AS otros
-    FROM 
-      IncidenciaNO incNO
-    LEFT JOIN 
-      User u2 ON incNO.userId = u2.id
+      s.nombre AS Sucursal
+    FROM
+      incidencia_no incNO
+    LEFT JOIN
+      user u2 ON incNO.userId = u2.id
+	LEFT JOIN
+      sucursal s ON incNO.sucursalId = s.id
 
     ORDER BY
-      createdAt, userId
-    OFFSET ${offset}
-    LIMIT ${pagination.limit}
-  `,
+      createdAt desc, userId
+    
+    LIMIT ${pagination.limit} OFFSET ${offset};
+   `,
     );
+
     return {
       page: pagination.page,
       limit: pagination.limit,
