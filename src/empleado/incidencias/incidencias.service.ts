@@ -70,6 +70,117 @@ export class IncidenciasService {
     };
   }
 
+  async findAllBySucursal(pagination: Pagination, sucursalId: number) {
+    const offset = (pagination.page - 1) * pagination.limit;
+    console.log(offset);
+    console.log(pagination.limit);
+    const rowIncidencia = await this.incidenciaRepository.count();
+    const rowIncidenciaNo = await this.incidenciaRepositoryNo.count();
+    const total = rowIncidencia + rowIncidenciaNo;
+    const incidenciaAll = await this.incidenciaRepository.query(
+      `
+    SELECT
+      inc.createdAt,
+      u1.id AS userId,
+      CONCAT(u1.firstname, ' ', u1.lastname) AS Empleado,
+      'Enfermedad' AS tipo,
+      s.nombre AS Sucursal
+    FROM
+      incidencia inc
+    LEFT JOIN
+      user u1 ON inc.userId = u1.id
+	  LEFT JOIN
+      sucursal s ON inc.sucursalId = s.id
+    WHERE
+      inc.sucursalId = ${sucursalId}
+
+    UNION ALL
+
+    SELECT
+      incNO.createdAt,
+      u2.id AS userId,
+      CONCAT(u2.firstname, ' ', u2.lastname) AS Empleado,
+      'Otros' AS tipo,
+      s.nombre AS Sucursal
+    FROM
+      incidencia_no incNO
+    LEFT JOIN
+      user u2 ON incNO.userId = u2.id
+	  LEFT JOIN
+      sucursal s ON incNO.sucursalId = s.id
+    WHERE
+      incNO.sucursalId = ${sucursalId}
+    ORDER BY
+      createdAt desc, userId
+    
+    LIMIT ${pagination.limit} OFFSET ${offset};
+   `,
+    );
+
+    return {
+      page: pagination.page,
+      limit: pagination.limit,
+      total: total,
+      data: incidenciaAll,
+    };
+  }
+
+  async findAllByFecha(pagination: Pagination, startDate: Date, endDate: Date) {
+    const offset = (pagination.page - 1) * pagination.limit;
+    console.log(offset);
+    console.log(pagination.limit);
+    const rowIncidencia = await this.incidenciaRepository.count();
+    const rowIncidenciaNo = await this.incidenciaRepositoryNo.count();
+    const total = rowIncidencia + rowIncidenciaNo;
+    const incidenciaAll = await this.incidenciaRepository.query(
+      `
+    SELECT
+      inc.createdAt,
+      u1.id AS userId,
+      CONCAT(u1.firstname, ' ', u1.lastname) AS Empleado,
+      'Enfermedad' AS tipo,
+      s.nombre AS Sucursal
+    FROM
+      incidencia inc
+    LEFT JOIN
+      user u1 ON inc.userId = u1.id
+	  LEFT JOIN
+      sucursal s ON inc.sucursalId = s.id
+    WHERE
+      inc.createdAt BETWEEN ${startDate} AND ${endDate}
+
+    UNION ALL
+
+    SELECT
+      incNO.createdAt,
+      u2.id AS userId,
+      CONCAT(u2.firstname, ' ', u2.lastname) AS Empleado,
+      'Otros' AS tipo,
+      s.nombre AS Sucursal
+    FROM
+      incidencia_no incNO
+    LEFT JOIN
+      user u2 ON incNO.userId = u2.id
+	  LEFT JOIN
+      sucursal s ON incNO.sucursalId = s.id
+
+    ORDER BY
+      createdAt desc, userId
+    WHERE
+    incNO.createdAt BETWEEN ${startDate} AND ${endDate}
+    
+    LIMIT ${pagination.limit} OFFSET ${offset};
+   `,
+    );
+
+    return {
+      page: pagination.page,
+      limit: pagination.limit,
+      total: total,
+      data: incidenciaAll,
+    };
+  }
+
   /*   findOne(id: number) {
     return `This action returns a #${id} empleado`;
   }

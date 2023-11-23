@@ -1,4 +1,4 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 //import { UpdateEmpleadoDto } from './dto/update-empleado.dto';
 import { Roles } from '../../auth/decorators/roles.decorator';
 import { ERole } from '../../auth/role.enum';
@@ -15,6 +15,15 @@ export class IncidenciasController {
   @Get()
   findAll(@Query() pagination: Pagination) {
     return this.incidenciasService.findAll(pagination);
+  }
+  @Get(':id')
+  findOne(@Param('id') id: number, @Query() pagination: Pagination) {
+    return this.incidenciasService.findAllBySucursal(pagination, id);
+  }
+
+  @Get('fecha/hola')
+  findByFecha() {
+    return 'fecha';
   }
 
   /*   @Get(':id')
