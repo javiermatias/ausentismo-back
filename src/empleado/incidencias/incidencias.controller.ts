@@ -4,12 +4,17 @@ import { Roles } from '../../auth/decorators/roles.decorator';
 import { ERole } from '../../auth/role.enum';
 import { IncidenciasService } from './incidencias.service';
 import { Pagination } from 'src/utils/pagination';
+import { SucursalService } from 'src/sucursal/sucursal.service';
+import { BuisnessException } from 'src/utils/buisness.exception';
 
 //import { Public } from 'src/auth/decorators/public.decorator';
 
 @Controller('incidencias')
 export class IncidenciasController {
-  constructor(private readonly incidenciasService: IncidenciasService) {}
+  constructor(
+    private readonly incidenciasService: IncidenciasService,
+    private readonly sucursalService: SucursalService,
+  ) {}
 
   @Roles(ERole.Empleado, ERole.Supervisor, ERole.Admin)
   @Get()
@@ -17,13 +22,37 @@ export class IncidenciasController {
     return this.incidenciasService.findAll(pagination);
   }
   @Get(':id')
-  findOne(@Param('id') id: number, @Query() pagination: Pagination) {
+  async findOne(@Param('id') id: number, @Query() pagination: Pagination) {
+    if (!(await this.sucursalService.findOne(id))) {
+      throw new BuisnessException('No Existe la Sucursal');
+    }
     return this.incidenciasService.findAllBySucursal(pagination, id);
   }
 
-  @Get('fecha/hola')
-  findByFecha() {
-    return 'fecha';
+  @Get('fecha/fecha')
+  findByFecha(
+    @Query() pagination: Pagination,
+    @Query('startDate') startDate: string,
+    @Query('endDate') endDate: string,
+  ) {
+    return this.incidenciasService.findAllByFecha(
+      pagination,
+      startDate,
+      endDate,
+    );
+  }
+  @Get('fecha/sucursal/:id')
+  findByFechaAndSucursal(
+    @Param('id') id: number,
+    @Query() pagination: Pagination,
+    @Query('startDate') startDate: string,
+    @Query('endDate') endDate: string,
+  ) {
+    return this.incidenciasService.findAllByFecha(
+      pagination,
+      startDate,
+      endDate,
+    );
   }
 
   /*   @Get(':id')

@@ -12,5 +12,6 @@ import { Sucursal } from 'src/empresa/entities/sucursal.entity';
   imports: [TypeOrmModule.forFeature([Sucursal, Localidad, Provincia])],
   controllers: [SucursalController, ProvinciaController, LocalidadController],
   providers: [SucursalService],
+  exports: [SucursalService],
 })
 export class SucursalModule {}

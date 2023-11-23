@@ -30,8 +30,12 @@ export class SucursalService {
     });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} sucursal`;
+  async findOne(id: number) {
+    return this.sucursalRepository.find({
+      where: {
+        id: id,
+      },
+    });
   }
 
   update(id: number, _updateSucursalDto: UpdateSucursalDto) {

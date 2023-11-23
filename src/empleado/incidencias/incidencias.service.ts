@@ -1,11 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Injectable } from '@nestjs/common';
-import { CreateIncidenciaDto } from '../dto/create-incidencia.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
 import { Incidencia } from '../entities/incidencia.entity';
-import { Sucursal } from 'src/empresa/entities/sucursal.entity';
 import { Pagination } from 'src/utils/pagination';
 import { IncidenciaNo } from '../entities/incidenciaNo.entity';
 
@@ -125,10 +122,14 @@ export class IncidenciasService {
     };
   }
 
-  async findAllByFecha(pagination: Pagination, startDate: Date, endDate: Date) {
+  async findAllByFecha(
+    pagination: Pagination,
+    startDate: string,
+    endDate: string,
+  ) {
     const offset = (pagination.page - 1) * pagination.limit;
-    console.log(offset);
-    console.log(pagination.limit);
+    console.log(startDate);
+    console.log(endDate);
     const rowIncidencia = await this.incidenciaRepository.count();
     const rowIncidenciaNo = await this.incidenciaRepositoryNo.count();
     const total = rowIncidencia + rowIncidenciaNo;
@@ -147,7 +148,7 @@ export class IncidenciasService {
 	  LEFT JOIN
       sucursal s ON inc.sucursalId = s.id
     WHERE
-      inc.createdAt BETWEEN ${startDate} AND ${endDate}
+      inc.createdAt BETWEEN '${startDate}' AND '${endDate}'
 
     UNION ALL
 
@@ -163,15 +164,15 @@ export class IncidenciasService {
       user u2 ON incNO.userId = u2.id
 	  LEFT JOIN
       sucursal s ON incNO.sucursalId = s.id
-
-    ORDER BY
-      createdAt desc, userId
     WHERE
-    incNO.createdAt BETWEEN ${startDate} AND ${endDate}
-    
+      incNO.createdAt BETWEEN '${startDate}' AND '${endDate}'
+    ORDER BY
+      createdAt desc, userId    
     LIMIT ${pagination.limit} OFFSET ${offset};
+    
    `,
     );
+    console.log('Generated SQL Query:');
 
     return {
       page: pagination.page,
@@ -181,9 +182,78 @@ export class IncidenciasService {
     };
   }
 
-  /*   findOne(id: number) {
-    return `This action returns a #${id} empleado`;
+  async findAllByFechaBySucursal(
+    pagination: Pagination,
+    startDate: string,
+    endDate: string,
+    sucursalId: number,
+  ) {
+    const offset = (pagination.page - 1) * pagination.limit;
+    const rowIncidencia = await this.incidenciaRepository.count();
+    const rowIncidenciaNo = await this.incidenciaRepositoryNo.count();
+    const total = rowIncidencia + rowIncidenciaNo;
+    const incidenciaAll = await this.incidenciaRepository.query(
+      `
+    SELECT
+      inc.createdAt,
+      u1.id AS userId,
+      CONCAT(u1.firstname, ' ', u1.lastname) AS Empleado,
+      'Enfermedad' AS tipo,
+      s.nombre AS Sucursal
+    FROM
+      incidencia inc
+    LEFT JOIN
+      user u1 ON inc.userId = u1.id
+	  LEFT JOIN
+      sucursal s ON inc.sucursalId = s.id
+    WHERE
+      inc.createdAt BETWEEN '${startDate}' AND '${endDate}'
+    AND 
+    inc.sucursalId = ${sucursalId}
+    UNION ALL
+
+    SELECT
+      incNO.createdAt,
+      u2.id AS userId,
+      CONCAT(u2.firstname, ' ', u2.lastname) AS Empleado,
+      'Otros' AS tipo,
+      s.nombre AS Sucursal
+    FROM
+      incidencia_no incNO
+    LEFT JOIN
+      user u2 ON incNO.userId = u2.id
+	  LEFT JOIN
+      sucursal s ON incNO.sucursalId = s.id
+    WHERE
+      incNO.createdAt BETWEEN '${startDate}' AND '${endDate}'
+    AND 
+      incNO.sucursalId = ${sucursalId}
+   
+    ORDER BY
+      createdAt desc, userId
+    
+      LIMIT ${pagination.limit} OFFSET ${offset};
+    
+   `,
+    );
+    console.log('Generated SQL Query:');
+
+    return {
+      page: pagination.page,
+      limit: pagination.limit,
+      total: total,
+      data: incidenciaAll,
+    };
   }
+
+  /*   async findOne(id: number) {
+    const Sucursal = await this.usersRepository.findOne({
+      where: { username },
+    });
+    return user;
+  } */
+
+  /*   
 
   update(id: number, updateEmpleadoDto: UpdateEmpleadoDto) {
     return `This action updates a #${id} empleado`;
