@@ -14,13 +14,10 @@ import { Sucursal } from 'src/empresa/entities/sucursal.entity';
 import { IncidenciasController } from './incidencias/incidencias.controller';
 import { IncidenciaController } from './incidencia/incidencia.controller';
 import { IncidenciasService } from './incidencias/incidencias.service';
-import { SucursalService } from 'src/sucursal/sucursal.service';
-import { SucursalModule } from 'src/sucursal/sucursal.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Incidencia, IncidenciaNo, User, Sucursal]),
-    SucursalModule,
   ],
   controllers: [
     EmpleadoController,
@@ -35,7 +32,6 @@ import { SucursalModule } from 'src/sucursal/sucursal.module';
     IncidenciasService,
     UploadService,
     EmailService,
-    SucursalService,
   ],
 })
 export class EmpleadoModule {}

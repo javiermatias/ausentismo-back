@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { Incidencia } from '../entities/incidencia.entity';
 import { Pagination } from 'src/utils/pagination';
 import { IncidenciaNo } from '../entities/incidenciaNo.entity';
+import { Sucursal } from 'src/empresa/entities/sucursal.entity';
 
 @Injectable()
 export class IncidenciasService {
@@ -13,12 +14,12 @@ export class IncidenciasService {
     private incidenciaRepository: Repository<Incidencia>,
     @InjectRepository(IncidenciaNo)
     private incidenciaRepositoryNo: Repository<IncidenciaNo>,
+    @InjectRepository(Sucursal)
+    private sucursalRepository: Repository<Sucursal>,
   ) {}
 
   async findAll(pagination: Pagination) {
     const offset = (pagination.page - 1) * pagination.limit;
-    console.log(offset);
-    console.log(pagination.limit);
     const rowIncidencia = await this.incidenciaRepository.count();
     const rowIncidenciaNo = await this.incidenciaRepositoryNo.count();
     const total = rowIncidencia + rowIncidenciaNo;
@@ -128,8 +129,6 @@ export class IncidenciasService {
     endDate: string,
   ) {
     const offset = (pagination.page - 1) * pagination.limit;
-    console.log(startDate);
-    console.log(endDate);
     const rowIncidencia = await this.incidenciaRepository.count();
     const rowIncidenciaNo = await this.incidenciaRepositoryNo.count();
     const total = rowIncidencia + rowIncidenciaNo;
@@ -172,8 +171,6 @@ export class IncidenciasService {
     
    `,
     );
-    console.log('Generated SQL Query:');
-
     return {
       page: pagination.page,
       limit: pagination.limit,
@@ -244,6 +241,14 @@ export class IncidenciasService {
       total: total,
       data: incidenciaAll,
     };
+  }
+
+  async findSucursal(id: number) {
+    return this.sucursalRepository.find({
+      where: {
+        id: id,
+      },
+    });
   }
 
   /*   async findOne(id: number) {

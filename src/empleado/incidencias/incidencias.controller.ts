@@ -1,20 +1,12 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
-//import { UpdateEmpleadoDto } from './dto/update-empleado.dto';
 import { Roles } from '../../auth/decorators/roles.decorator';
 import { ERole } from '../../auth/role.enum';
 import { IncidenciasService } from './incidencias.service';
 import { Pagination } from 'src/utils/pagination';
-import { SucursalService } from 'src/sucursal/sucursal.service';
-import { BuisnessException } from 'src/utils/buisness.exception';
-
-//import { Public } from 'src/auth/decorators/public.decorator';
 
 @Controller('incidencias')
 export class IncidenciasController {
-  constructor(
-    private readonly incidenciasService: IncidenciasService,
-    private readonly sucursalService: SucursalService,
-  ) {}
+  constructor(private readonly incidenciasService: IncidenciasService) {}
 
   @Roles(ERole.Empleado, ERole.Supervisor, ERole.Admin)
   @Get()
@@ -23,9 +15,6 @@ export class IncidenciasController {
   }
   @Get(':id')
   async findOne(@Param('id') id: number, @Query() pagination: Pagination) {
-    if (!(await this.sucursalService.findOne(id))) {
-      throw new BuisnessException('No Existe la Sucursal');
-    }
     return this.incidenciasService.findAllBySucursal(pagination, id);
   }
 
