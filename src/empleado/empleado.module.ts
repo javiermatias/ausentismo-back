@@ -14,6 +14,8 @@ import { Sucursal } from 'src/empresa/entities/sucursal.entity';
 import { IncidenciasController } from './incidencias/incidencias.controller';
 import { IncidenciaController } from './incidencia/incidencia.controller';
 import { IncidenciasService } from './incidencias/incidencias.service';
+import { IncidenciasEmpleadoController } from './incidenciaEmpleado/incidencia.empleado.controller';
+import { IncidenciaEmpleadoService } from './incidenciaEmpleado/incidencia.empleado.service';
 
 @Module({
   imports: [
@@ -24,6 +26,7 @@ import { IncidenciasService } from './incidencias/incidencias.service';
     IncidenciaController,
     IncidenciaNoController,
     IncidenciasController,
+    IncidenciasEmpleadoController,
   ],
   providers: [
     EmpleadoService,
@@ -32,6 +35,7 @@ import { IncidenciasService } from './incidencias/incidencias.service';
     IncidenciasService,
     UploadService,
     EmailService,
+    IncidenciaEmpleadoService,
   ],
 })
 export class EmpleadoModule {}

@@ -39,6 +39,12 @@ export class IncidenciaService {
     //return createIncidenciaDto;
   }
 
+  findOne(id: number) {
+    return this.incidenciaRepository.findOne({
+      where: { id: id },
+    });
+  }
+
   /*   findAll() {
     return `This action returns all empleado`;
   }
