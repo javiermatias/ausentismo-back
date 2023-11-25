@@ -7,6 +7,7 @@ import { Repository } from 'typeorm';
 import { IncidenciaNo } from '../entities/incidenciaNo.entity';
 import { CreateIncidenciaNoDto } from '../dto/create-incidencia-no.dto';
 import { Sucursal } from 'src/empresa/entities/sucursal.entity';
+import { IncidenciaService } from '../incidencia/incidencia.service';
 
 @Injectable()
 export class IncidenciaNoService {
@@ -17,6 +18,7 @@ export class IncidenciaNoService {
     private incidenciaNoRepository: Repository<IncidenciaNo>,
     @InjectRepository(Sucursal)
     private sucursalRepository: Repository<Sucursal>,
+    private readonly incidenciaService: IncidenciaService,
   ) {}
   async create(createIncidenciaNoDto: CreateIncidenciaNoDto) {
     const user = await this.usersRepository.findOne({
@@ -25,11 +27,12 @@ export class IncidenciaNoService {
     const sucursal = await this.sucursalRepository.findOne({
       where: { id: createIncidenciaNoDto.idSucursal },
     });
-
+    const nroReferencia = await this.incidenciaService.getMaxReferenceNumber();
     const incidencia = {
       ...createIncidenciaNoDto, // Copy fields from sourceObject
-      user: user,
-      sucursal: sucursal,
+      nroReferencia,
+      user,
+      sucursal,
     };
 
     return this.incidenciaNoRepository.save(incidencia);

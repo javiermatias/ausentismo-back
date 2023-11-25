@@ -29,14 +29,14 @@ export class IncidenciaNoController {
     const incidencia = await this.incidenciaService.create(
       createIncidenciaNoDto,
     );
-    console.log(incidencia);
+
     const email = await this.emailService.sendEmailIncidenciaNo(
       'javierjimenez78@gmail.com',
       incidencia,
     );
     console.log(email);
     return {
-      value: incidencia.id,
+      value: incidencia.nroReferencia,
       message: 'Incidencia fue creada exitosamente',
     };
   }

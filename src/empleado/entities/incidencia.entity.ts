@@ -13,6 +13,9 @@ export class Incidencia {
   @PrimaryGeneratedColumn('increment')
   id: number;
 
+  @Column({ type: 'int', unique: true, nullable: false })
+  nroReferencia: number;
+
   @Column({ type: 'varchar', length: 100 })
   nombre: string;
 

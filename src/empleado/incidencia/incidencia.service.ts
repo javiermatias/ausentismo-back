@@ -28,11 +28,13 @@ export class IncidenciaService {
     const sucursal = await this.sucursalRepository.findOne({
       where: { id: createIncidenciaDto.idSucursal },
     });
+    const nroReferencia = await this.getMaxReferenceNumber();
 
     const incidencia = {
       ...createIncidenciaDto, // Copy fields from sourceObject
-      user: user,
-      sucursal: sucursal,
+      nroReferencia,
+      user,
+      sucursal,
     };
 
     return this.incidenciaRepository.save(incidencia);
@@ -43,6 +45,27 @@ export class IncidenciaService {
     return this.incidenciaRepository.findOne({
       where: { id: id },
     });
+  }
+
+  async getMaxReferenceNumber() {
+    const maxRefNumIncidencia = await this.incidenciaRepository
+      .createQueryBuilder('incidencia')
+      .select('MAX(incidencia.nroReferencia)', 'maxRefNum')
+      .getRawOne();
+
+    const maxRefNumIncidenciaNo = await this.incidenciaRepositoryNo
+      .createQueryBuilder('incidencia_no')
+      .select('MAX(incidencia_no.nroReferencia)', 'maxRefNum')
+      .getRawOne();
+
+    console.log(maxRefNumIncidencia);
+    console.log(maxRefNumIncidenciaNo);
+    // Determine the maximum reference number among the two tables
+    const largestReferenceNumber = Math.max(
+      maxRefNumIncidencia?.maxRefNum || 0,
+      maxRefNumIncidenciaNo?.maxRefNum || 0,
+    );
+    return largestReferenceNumber + 1;
   }
 
   /*   findAll() {

@@ -3,6 +3,7 @@ import {
   //   Get,
   Post,
   Body,
+  Get,
   /*   Patch,
   Param,
   Delete, */
@@ -34,9 +35,14 @@ export class IncidenciaController {
     );
     //console.log(email);
     return {
-      value: incidencia.id,
+      value: incidencia.nroReferencia,
       message: 'Incidencia fue creada exitosamente',
     };
+  }
+
+  @Get()
+  findAll() {
+    return this.incidenciaService.getMaxReferenceNumber();
   }
 
   /*   @Roles(ERole.Empleado, ERole.Supervisor, ERole.Admin)

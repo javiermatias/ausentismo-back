@@ -192,6 +192,7 @@ export class IncidenciasService {
     const incidenciaAll = await this.incidenciaRepository.query(
       `
     SELECT
+      inc.nroReferencia,
       inc.createdAt,
       u1.id AS userId,
       CONCAT(u1.firstname, ' ', u1.lastname) AS Empleado,
@@ -210,6 +211,7 @@ export class IncidenciasService {
     UNION ALL
 
     SELECT
+      incNO.nroReferencia,
       incNO.createdAt,
       u2.id AS userId,
       CONCAT(u2.firstname, ' ', u2.lastname) AS Empleado,
