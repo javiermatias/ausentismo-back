@@ -41,9 +41,9 @@ export class IncidenciaService {
     //return createIncidenciaDto;
   }
 
-  findOne(id: number) {
+  findOne(nro_referencia: number) {
     return this.incidenciaRepository.findOne({
-      where: { id: id },
+      where: { nroReferencia: nro_referencia },
     });
   }
 

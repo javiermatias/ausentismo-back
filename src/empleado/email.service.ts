@@ -2,10 +2,21 @@ import { SendGridService } from '@anchan828/nest-sendgrid';
 import { Injectable } from '@nestjs/common';
 import { Incidencia } from './entities/incidencia.entity';
 import { IncidenciaNo } from './entities/incidenciaNo.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { User } from 'src/users/entities/user.entity';
+import { Role } from 'src/users/entities/role.entity';
+import { ERole } from 'src/auth/role.enum';
 
 @Injectable()
 export class EmailService {
-  constructor(private readonly sendGrid: SendGridService) {}
+  constructor(
+    private readonly sendGrid: SendGridService,
+    @InjectRepository(User)
+    private usersRepository: Repository<User>,
+    @InjectRepository(Role)
+    private roleRepository: Repository<Role>,
+  ) {}
 
   async sendEmailIncidencia(
     sender: string,
@@ -73,5 +84,20 @@ export class EmailService {
   `;
 
     return htmlContent;
+  }
+
+  async searchRRHH(idEmpresa: number): Promise<User[]> {
+    const role = await this.roleRepository.findOne({
+      where: { roleName: ERole.Supervisor },
+    });
+    const usersInRoleAndCompany = await this.usersRepository
+      .createQueryBuilder('user')
+      .innerJoinAndSelect('user.role', 'role')
+      .innerJoinAndSelect('user.empresa', 'empresa')
+      .where('role.id = :roleId', { roleId: role.id })
+      .andWhere('empresa.id = :companyId', { companyId: idEmpresa })
+      .getMany();
+
+    return usersInRoleAndCompany;
   }
 }

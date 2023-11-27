@@ -20,7 +20,6 @@ export class UsersService {
     const role = await this.roleRepository.findOne({
       where: { roleName: createUserDto.rol },
     });
-    // console.log(role);
 
     const user = {
       ...createUserDto, // Copy fields from sourceObject
@@ -28,12 +27,6 @@ export class UsersService {
       password: hashedPassword,
       role: role,
     };
-
-    /*   this.usersRepository
-      .createQueryBuilder()
-      .insert()
-      .into(User)
-      .values([...user]); */
     return this.usersRepository.save(user);
   }
 

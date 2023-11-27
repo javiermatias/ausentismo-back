@@ -38,4 +38,10 @@ export class IncidenciaNoService {
     return this.incidenciaNoRepository.save(incidencia);
     //return createIncidenciaDto;
   }
+
+  findOne(nro_referencia: number) {
+    return this.incidenciaNoRepository.findOne({
+      where: { nroReferencia: nro_referencia },
+    });
+  }
 }

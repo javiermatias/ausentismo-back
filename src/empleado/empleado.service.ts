@@ -47,7 +47,7 @@ export class EmpleadoService {
       .limit(pagination.limit)
       .getRawMany<Empleado>();
 
-    console.log(users);
+    //console.log(users);
 
     /* const items = await this.dataSource
       .createQueryBuilder(User, 'user')

@@ -4,6 +4,8 @@ import {
   Post,
   Body,
   Get,
+  Req,
+  Param,
   /*   Patch,
   Param,
   Delete, */
@@ -14,6 +16,7 @@ import { ERole } from '../../auth/role.enum';
 import { IncidenciaService } from './incidencia.service';
 import { CreateIncidenciaDto } from '../dto/create-incidencia.dto';
 import { EmailService } from '../email.service';
+import { UserDto } from '../dto/auth.user.dto';
 
 //import { Public } from 'src/auth/decorators/public.decorator';
 
@@ -26,13 +29,21 @@ export class IncidenciaController {
 
   @Roles(ERole.Empleado, ERole.Supervisor, ERole.Admin)
   @Post()
-  async create(@Body() createIncidenciaDto: CreateIncidenciaDto) {
+  async create(
+    @Body() createIncidenciaDto: CreateIncidenciaDto,
+    @Req() req: Request,
+  ) {
+    const user: UserDto = req['user'];
     const incidencia = await this.incidenciaService.create(createIncidenciaDto);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const email = await this.emailService.sendEmailIncidencia(
-      'javierjimenez78@gmail.com',
-      incidencia,
-    );
+    const RRHH = await this.emailService.searchRRHH(user.empresaId);
+    for (const user of RRHH) {
+      const email = await this.emailService.sendEmailIncidencia(
+        user.email,
+        incidencia,
+      );
+      console.log(email);
+    }
+
     //console.log(email);
     return {
       value: incidencia.nroReferencia,
@@ -43,6 +54,12 @@ export class IncidenciaController {
   @Get()
   findAll() {
     return this.incidenciaService.getMaxReferenceNumber();
+  }
+
+  @Get(':id')
+  findOne(@Param('id') nro_referencia: string) {
+    console.log(nro_referencia);
+    return this.incidenciaService.findOne(+nro_referencia);
   }
 
   /*   @Roles(ERole.Empleado, ERole.Supervisor, ERole.Admin)

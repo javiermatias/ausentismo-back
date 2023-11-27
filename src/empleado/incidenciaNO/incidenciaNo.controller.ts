@@ -3,6 +3,9 @@ import {
   //   Get,
   Post,
   Body,
+  Get,
+  Param,
+  Req,
   /*   Patch,
     Param,
     Delete, */
@@ -13,32 +16,45 @@ import { ERole } from '../../auth/role.enum';
 import { EmailService } from '../email.service';
 import { IncidenciaNoService } from './incidenciaNo.service';
 import { CreateIncidenciaNoDto } from '../dto/create-incidencia-no.dto';
+import { UserDto } from '../dto/auth.user.dto';
 
 //import { Public } from 'src/auth/decorators/public.decorator';
 
 @Controller('incidenciaNo')
 export class IncidenciaNoController {
   constructor(
-    private readonly incidenciaService: IncidenciaNoService,
+    private readonly incidenciaNoService: IncidenciaNoService,
     private readonly emailService: EmailService,
   ) {}
 
   @Roles(ERole.Empleado, ERole.Supervisor, ERole.Admin)
   @Post()
-  async create(@Body() createIncidenciaNoDto: CreateIncidenciaNoDto) {
-    const incidencia = await this.incidenciaService.create(
+  async create(
+    @Body() createIncidenciaNoDto: CreateIncidenciaNoDto,
+    @Req() req: Request,
+  ) {
+    const user: UserDto = req['user'];
+    const incidencia = await this.incidenciaNoService.create(
       createIncidenciaNoDto,
     );
+    const RRHH = await this.emailService.searchRRHH(user.empresaId);
 
-    const email = await this.emailService.sendEmailIncidenciaNo(
-      'javierjimenez78@gmail.com',
-      incidencia,
-    );
-    console.log(email);
+    for (const user of RRHH) {
+      const email = await this.emailService.sendEmailIncidenciaNo(
+        user.email,
+        incidencia,
+      );
+      console.log(email);
+    }
     return {
       value: incidencia.nroReferencia,
       message: 'Incidencia fue creada exitosamente',
     };
+  }
+
+  @Get(':id')
+  findOne(@Param('id') nro_referencia: string) {
+    return this.incidenciaNoService.findOne(+nro_referencia);
   }
 
   /*   @Roles(ERole.Empleado, ERole.Supervisor, ERole.Admin)

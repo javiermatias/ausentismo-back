@@ -16,10 +16,11 @@ import { IncidenciaController } from './incidencia/incidencia.controller';
 import { IncidenciasService } from './incidencias/incidencias.service';
 import { IncidenciasEmpleadoController } from './incidenciaEmpleado/incidencia.empleado.controller';
 import { IncidenciaEmpleadoService } from './incidenciaEmpleado/incidencia.empleado.service';
+import { Role } from 'src/users/entities/role.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Incidencia, IncidenciaNo, User, Sucursal]),
+    TypeOrmModule.forFeature([Incidencia, IncidenciaNo, User, Role, Sucursal]),
   ],
   controllers: [
     EmpleadoController,
