@@ -16,9 +16,6 @@ import { CreateEmpleadoDto } from './dto/create-empleado.dto';
 import { UpdateEmpleadoDto } from './dto/update-empleado.dto';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { ERole } from '../auth/role.enum';
-
-//import { Public } from 'src/auth/decorators/public.decorator';
-import { EmailService } from './email.service';
 import { UserDto } from './dto/auth.user.dto';
 import { Pagination } from 'src/utils/pagination';
 
@@ -26,10 +23,7 @@ import { Pagination } from 'src/utils/pagination';
 
 @Controller('empleado')
 export class EmpleadoController {
-  constructor(
-    private readonly empleadoService: EmpleadoService,
-    private readonly emailService: EmailService,
-  ) {}
+  constructor(private readonly empleadoService: EmpleadoService) {}
   @Roles(ERole.Admin, ERole.RRHH)
   @Post()
   create(@Body() createEmpleadoDto: CreateEmpleadoDto) {

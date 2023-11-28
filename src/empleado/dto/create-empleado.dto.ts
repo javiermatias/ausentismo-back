@@ -1,5 +1,5 @@
 import { Transform } from 'class-transformer';
-import { IsNotEmpty, IsEmail } from 'class-validator';
+import { IsNotEmpty, IsEmail, IsOptional, IsInt } from 'class-validator';
 
 export class CreateEmpleadoDto {
   @IsNotEmpty()
@@ -9,6 +9,9 @@ export class CreateEmpleadoDto {
   @Transform(({ value }) => value.toUpperCase())
   readonly lastname: string;
   @IsNotEmpty()
+  @IsInt()
+  readonly dni: number;
+  @IsOptional()
   @IsEmail()
   readonly email: string;
 }

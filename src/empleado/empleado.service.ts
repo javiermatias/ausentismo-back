@@ -1,22 +1,29 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { CreateEmpleadoDto } from './dto/create-empleado.dto';
 import { UpdateEmpleadoDto } from './dto/update-empleado.dto';
 import { User } from 'src/users/entities/user.entity';
-import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
-import { DataSource, Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { UserDto } from './dto/auth.user.dto';
 import { Pagination } from 'src/utils/pagination';
+import { UsersService } from 'src/users/users.service';
+import { CreateUserDto } from 'src/users/dto/create-user.dto';
 
 @Injectable()
 export class EmpleadoService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
-    @InjectDataSource() private dataSource: DataSource,
+    @Inject(UsersService)
+    private readonly userService: UsersService,
   ) {}
   create(createEmpleadoDto: CreateEmpleadoDto) {
-    return 'This action adds a new empleado';
+    const createUserDto: CreateUserDto = {
+      ...createEmpleadoDto,
+      rol: 'empleado', // Provide a default role or handle it based on your application logic
+    };
+    return this.userService.create(createUserDto);
   }
 
   async findAll(pagination: Pagination, user: UserDto) {

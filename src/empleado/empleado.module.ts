@@ -19,9 +19,11 @@ import { IncidenciaEmpleadoService } from './incidenciaEmpleado/incidencia.emple
 import { Role } from 'src/users/entities/role.entity';
 import { EncargadoController } from './encargado/encargado.controller';
 import { EncargadoService } from './encargado/encargado.service';
+import { UsersModule } from 'src/users/users.module';
 
 @Module({
   imports: [
+    UsersModule,
     TypeOrmModule.forFeature([Incidencia, IncidenciaNo, User, Role, Sucursal]),
   ],
   controllers: [

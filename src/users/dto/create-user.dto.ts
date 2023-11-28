@@ -1,5 +1,5 @@
 import { Transform } from 'class-transformer';
-import { IsEmail, IsIn, IsInt, IsNotEmpty } from 'class-validator';
+import { IsEmail, IsIn, IsInt, IsNotEmpty, IsOptional } from 'class-validator';
 import { ERole } from '../../auth/role.enum';
 
 const roles = Object.values(ERole);
@@ -11,7 +11,7 @@ export class CreateUserDto {
   @IsNotEmpty()
   @Transform(({ value }) => value.toUpperCase())
   readonly lastname: string;
-  @IsNotEmpty()
+  @IsOptional()
   @IsEmail()
   readonly email: string;
   @IsNotEmpty()
