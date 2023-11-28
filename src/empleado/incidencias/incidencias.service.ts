@@ -233,7 +233,7 @@ export class IncidenciasService {
     ORDER BY
       createdAt desc, userId
     
-      LIMIT ${pagination.limit} OFFSET ${offset};
+    LIMIT ${pagination.limit} OFFSET ${offset};
     
    `,
     );

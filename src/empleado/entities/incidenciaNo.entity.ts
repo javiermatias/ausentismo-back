@@ -25,6 +25,9 @@ export class IncidenciaNo {
   @Column({ type: 'varchar', length: 100, nullable: true })
   legajo: string;
 
+  @Column({ type: 'varchar', length: 100 })
+  direccion: string;
+
   @Column({ type: 'varchar', length: 25 })
   celular: string;
 

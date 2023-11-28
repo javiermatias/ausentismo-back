@@ -7,7 +7,6 @@ import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
 import { UserDto } from './dto/auth.user.dto';
 import { Pagination } from 'src/utils/pagination';
-import { Empleado } from './entities/empleado.entity';
 
 @Injectable()
 export class EmpleadoService {
@@ -23,41 +22,24 @@ export class EmpleadoService {
   async findAll(pagination: Pagination, user: UserDto) {
     const skip = (pagination.page - 1) * pagination.limit;
     const rowCount = await this.usersRepository.count();
-
-    const users = await this.dataSource
-      .createQueryBuilder(User, 'user')
-      .select([
-        'user.id as id',
-        'user.dni as dni',
-        'user.firstname as nombre',
-        'user.lastname as apellido',
-        'user.email as email',
-      ])
-      .innerJoin('user.role', 'role') // Join the 'role' relationship
-      .innerJoin('user.empresa', 'empresa') // Join the 'empresa' relationship
-      .where('role.roleName = :roleName', { roleName: 'empleado' })
-      .andWhere('empresa.id = :empresaId', { empresaId: user.empresaId }) // Replace 1079 with the desired empresa ID
-      .andWhere(
-        'user.firstname LIKE :nombre OR user.lastname LIKE :nombre OR user.dni LIKE :nombre',
-        {
-          nombre: `%${pagination.search}%`,
-        },
-      )
-      .offset(skip)
-      .limit(pagination.limit)
-      .getRawMany<Empleado>();
-
-    //console.log(users);
-
-    /* const items = await this.dataSource
-      .createQueryBuilder(User, 'user')
-      // .select(['user.dni', 'user.firstname', 'user.lastname', 'user.email'])
-      .getMany(); */
-
-    /*   const [items, total] = await this.usersRepository.findAndCount({
-      skip,
-      take: limit,
-    }); */
+    console.log(user.empresaId);
+    const users = await this.usersRepository.query(
+      `
+      SELECT user.id as id, 
+      user.dni as dni, 
+      user.firstname as nombre, 
+      user.lastname as apellido, 
+      user.email as email
+      FROM user
+      INNER JOIN role ON user.roleId = role.id
+      INNER JOIN empresa ON user.empresaId= empresa.id
+      WHERE role.roleName = 'empleado'
+      AND empresa.id = ${user.empresaId}
+      AND (user.firstname LIKE '%${pagination.search}%' OR user.lastname LIKE '%${pagination.search}%' OR user.dni LIKE '%${pagination.search}%')
+      LIMIT ${pagination.limit} OFFSET ${skip};
+    
+   `,
+    );
 
     return {
       page: pagination.page,
@@ -76,6 +58,41 @@ export class EmpleadoService {
   }
 
   remove(id: number) {
-    return `This action removes a #${id} empleado`;
+    return this.usersRepository.delete(id);
   }
 }
+
+/* async findAll(pagination: Pagination, user: UserDto) {
+  const skip = (pagination.page - 1) * pagination.limit;
+  const rowCount = await this.usersRepository.count();
+  console.log(user.empresaId);
+  const users = await this.dataSource
+    .createQueryBuilder(User, 'user')
+    .select([
+      'user.id as id',
+      'user.dni as dni',
+      'user.firstname as nombre',
+      'user.lastname as apellido',
+      'user.email as email',
+    ])
+    .innerJoin('user.role', 'role') // Join the 'role' relationship
+    .innerJoin('user.empresa', 'empresa') // Join the 'empresa' relationship
+    .where('role.roleName = :roleName', { roleName: 'empleado' })
+    .andWhere('empresa.id = :empresaId', { empresaId: user.empresaId }) // Replace 1079 with the desired empresa ID
+    .andWhere(
+      'user.firstname LIKE :nombre OR user.lastname LIKE :nombre OR user.dni LIKE :nombre',
+      {
+        nombre: `%${pagination.search}%`,
+      },
+    )
+    .offset(skip)
+    .limit(pagination.limit)
+    .getRawMany<Empleado>();
+
+  return {
+    page: pagination.page,
+    limit: pagination.limit,
+    total: rowCount,
+    data: users,
+  };
+} */

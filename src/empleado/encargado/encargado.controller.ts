@@ -1,9 +1,6 @@
 import {
   Controller,
   Get,
-  Post,
-  Body,
-  Patch,
   Param,
   Delete,
   Query,
@@ -11,31 +8,23 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { EmpleadoService } from './empleado.service';
-import { CreateEmpleadoDto } from './dto/create-empleado.dto';
-import { UpdateEmpleadoDto } from './dto/update-empleado.dto';
-import { Roles } from '../auth/decorators/roles.decorator';
-import { ERole } from '../auth/role.enum';
 
-//import { Public } from 'src/auth/decorators/public.decorator';
-import { EmailService } from './email.service';
-import { UserDto } from './dto/auth.user.dto';
 import { Pagination } from 'src/utils/pagination';
+import { EncargadoService } from './encargado.service';
+import { Roles } from 'src/auth/decorators/roles.decorator';
+import { ERole } from 'src/auth/role.enum';
+import { UserDto } from '../dto/auth.user.dto';
 
 //import { Public } from 'src/auth/decorators/public.decorator';
 
-@Controller('empleado')
-export class EmpleadoController {
-  constructor(
-    private readonly empleadoService: EmpleadoService,
-    private readonly emailService: EmailService,
-  ) {}
+@Controller('encargado')
+export class EncargadoController {
+  constructor(private readonly encargadoService: EncargadoService) {}
   @Roles(ERole.Admin, ERole.RRHH)
-  @Post()
+  /*   @Post()
   create(@Body() createEmpleadoDto: CreateEmpleadoDto) {
     return this.empleadoService.create(createEmpleadoDto);
-  }
-
+  } */
   @Roles(ERole.Admin, ERole.RRHH)
   @Get()
   @UsePipes(new ValidationPipe({ transform: true }))
@@ -45,10 +34,10 @@ export class EmpleadoController {
   ) {
     const user: UserDto = req['user'];
 
-    return this.empleadoService.findAll(pagination, user);
+    return this.encargadoService.findAll(pagination, user);
   }
 
-  @Get(':id')
+  /*  @Get(':id')
   findOne(@Param('id') id: string) {
     return this.empleadoService.findOne(+id);
   }
@@ -59,10 +48,10 @@ export class EmpleadoController {
     @Body() updateEmpleadoDto: UpdateEmpleadoDto,
   ) {
     return this.empleadoService.update(+id, updateEmpleadoDto);
-  }
+  } */
   @Roles(ERole.Admin, ERole.RRHH)
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.empleadoService.remove(+id);
+    return this.encargadoService.remove(+id);
   }
 }

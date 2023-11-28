@@ -17,6 +17,8 @@ import { IncidenciasService } from './incidencias/incidencias.service';
 import { IncidenciasEmpleadoController } from './incidenciaEmpleado/incidencia.empleado.controller';
 import { IncidenciaEmpleadoService } from './incidenciaEmpleado/incidencia.empleado.service';
 import { Role } from 'src/users/entities/role.entity';
+import { EncargadoController } from './encargado/encargado.controller';
+import { EncargadoService } from './encargado/encargado.service';
 
 @Module({
   imports: [
@@ -24,6 +26,7 @@ import { Role } from 'src/users/entities/role.entity';
   ],
   controllers: [
     EmpleadoController,
+    EncargadoController,
     IncidenciaController,
     IncidenciaNoController,
     IncidenciasController,
@@ -31,6 +34,7 @@ import { Role } from 'src/users/entities/role.entity';
   ],
   providers: [
     EmpleadoService,
+    EncargadoService,
     IncidenciaService,
     IncidenciaNoService,
     IncidenciasService,
