@@ -3,7 +3,7 @@ export class UserResponseDTO {
   dni: number;
   username: string;
   email: string;
-  firstname: string;
-  lastname: string;
+  nombre: string;
+  apellido: string;
   createdAt: Date;
 }

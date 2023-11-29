@@ -37,7 +37,7 @@ export class IncidenciaEmpleadoService {
       inc.nroReferencia,
       inc.createdAt,
       u1.id AS userId,
-      CONCAT(u1.firstname, ' ', u1.lastname) AS Empleado,
+      CONCAT(u1.nombre, ' ', u1.apellido) AS Empleado,
       'Enfermedad' AS tipo,
       s.nombre AS Sucursal
     FROM
@@ -55,7 +55,7 @@ export class IncidenciaEmpleadoService {
       incNO.nroReferencia,
       incNO.createdAt,
       u2.id AS userId,
-      CONCAT(u2.firstname, ' ', u2.lastname) AS Empleado,
+      CONCAT(u2.nombre, ' ', u2.apellido) AS Empleado,
       'Otros' AS tipo,
       s.nombre AS Sucursal
     FROM

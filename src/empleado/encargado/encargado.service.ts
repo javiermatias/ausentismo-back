@@ -25,15 +25,15 @@ export class EncargadoService {
       `
       SELECT user.id as id, 
       user.dni as dni, 
-      user.firstname as nombre, 
-      user.lastname as apellido, 
+      user.nombre as nombre, 
+      user.apellido as apellido, 
       user.email as email
       FROM user
       INNER JOIN role ON user.roleId = role.id
       INNER JOIN empresa ON user.empresaId= empresa.id
       WHERE role.roleName = 'supervisor'
       AND empresa.id = ${user.empresaId}
-      AND (user.firstname LIKE '%${pagination.search}%' OR user.lastname LIKE '%${pagination.search}%' OR user.dni LIKE '%${pagination.search}%')
+      AND (user.nombre LIKE '%${pagination.search}%' OR user.apellido LIKE '%${pagination.search}%' OR user.dni LIKE '%${pagination.search}%')
       LIMIT ${pagination.limit} OFFSET ${skip};
     
    `,

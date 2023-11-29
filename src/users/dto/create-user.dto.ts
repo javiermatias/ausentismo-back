@@ -7,10 +7,10 @@ const roles = Object.values(ERole);
 export class CreateUserDto {
   @IsNotEmpty()
   @Transform(({ value }) => value.toUpperCase())
-  readonly firstname: string;
+  readonly nombre: string;
   @IsNotEmpty()
   @Transform(({ value }) => value.toUpperCase())
-  readonly lastname: string;
+  readonly apellido: string;
   @IsOptional()
   @IsEmail()
   readonly email: string;
@@ -19,4 +19,6 @@ export class CreateUserDto {
   readonly dni: number;
   @IsIn(roles)
   readonly rol: string;
+  @IsInt()
+  readonly empresaId: number;
 }

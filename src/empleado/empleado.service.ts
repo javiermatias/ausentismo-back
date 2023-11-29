@@ -29,20 +29,19 @@ export class EmpleadoService {
   async findAll(pagination: Pagination, user: UserDto) {
     const skip = (pagination.page - 1) * pagination.limit;
     const rowCount = await this.usersRepository.count();
-    console.log(user.empresaId);
     const users = await this.usersRepository.query(
       `
       SELECT user.id as id, 
       user.dni as dni, 
-      user.firstname as nombre, 
-      user.lastname as apellido, 
+      user.nombre as nombre, 
+      user.apellido as apellido, 
       user.email as email
       FROM user
       INNER JOIN role ON user.roleId = role.id
       INNER JOIN empresa ON user.empresaId= empresa.id
       WHERE role.roleName = 'empleado'
       AND empresa.id = ${user.empresaId}
-      AND (user.firstname LIKE '%${pagination.search}%' OR user.lastname LIKE '%${pagination.search}%' OR user.dni LIKE '%${pagination.search}%')
+      AND (user.nombre LIKE '%${pagination.search}%' OR user.apellido LIKE '%${pagination.search}%' OR user.dni LIKE '%${pagination.search}%')
       LIMIT ${pagination.limit} OFFSET ${skip};
     
    `,

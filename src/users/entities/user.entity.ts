@@ -28,10 +28,10 @@ export class User {
   email: string;
 
   @Column({ type: 'varchar', length: 255, nullable: false })
-  firstname: string;
+  nombre: string;
 
   @Column({ type: 'varchar', length: 255, nullable: false })
-  lastname: string;
+  apellido: string;
 
   @CreateDateColumn({
     type: 'timestamp',

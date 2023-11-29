@@ -6,11 +6,11 @@ import { Transform } from 'class-transformer';
 export class UpdateUserDto extends PartialType(CreateUserDto) {
   @IsNotEmpty()
   @Transform(({ value }) => value.toUpperCase())
-  readonly firstname?: string;
+  readonly nombre?: string;
 
   @IsNotEmpty()
   @Transform(({ value }) => value.toUpperCase())
-  readonly lastname?: string;
+  readonly apellido?: string;
 
   @IsNotEmpty()
   @IsEmail()

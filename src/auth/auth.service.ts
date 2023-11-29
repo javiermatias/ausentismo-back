@@ -33,8 +33,8 @@ export class AuthService {
     };
     return {
       id: user.id,
-      firstname: user.firstname,
-      lastname: user.lastname,
+      nombre: user.nombre,
+      apellido: user.apellido,
       dni: user.dni,
       email: user.email,
       role: user.role.roleName,

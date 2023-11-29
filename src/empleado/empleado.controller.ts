@@ -26,8 +26,16 @@ export class EmpleadoController {
   constructor(private readonly empleadoService: EmpleadoService) {}
   @Roles(ERole.Admin, ERole.RRHH)
   @Post()
-  create(@Body() createEmpleadoDto: CreateEmpleadoDto) {
-    return this.empleadoService.create(createEmpleadoDto);
+  async create(
+    @Body() createEmpleadoDto: CreateEmpleadoDto,
+    @Req() req: Request,
+  ) {
+    const user: UserDto = req['user'];
+    createEmpleadoDto.empresaId = user.empresaId;
+    await this.empleadoService.create(createEmpleadoDto);
+    return {
+      message: 'User created successfully',
+    };
   }
 
   @Roles(ERole.Admin, ERole.RRHH)
