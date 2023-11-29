@@ -1,4 +1,7 @@
-import { PartialType } from '@nestjs/mapped-types';
+import { OmitType, PartialType } from '@nestjs/mapped-types';
 import { CreateEmpleadoDto } from './create-empleado.dto';
 
-export class UpdateEmpleadoDto extends PartialType(CreateEmpleadoDto) {}
+// Exclude the 'dni' field from CreateEmpleadoDto
+export class UpdateEmpleadoDto extends PartialType(
+  OmitType(CreateEmpleadoDto, ['dni']), // Exclude 'dni' field
+) {}

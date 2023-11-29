@@ -9,6 +9,7 @@ import { UserDto } from './dto/auth.user.dto';
 import { Pagination } from 'src/utils/pagination';
 import { UsersService } from 'src/users/users.service';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
+import { BuisnessException } from 'src/utils/buisness.exception';
 
 @Injectable()
 export class EmpleadoService {
@@ -59,8 +60,17 @@ export class EmpleadoService {
     return `This action returns a #${id} empleado`;
   }
 
-  update(id: number, updateEmpleadoDto: UpdateEmpleadoDto) {
-    return `This action updates a #${id} empleado`;
+  async update(dni: number, updateEmpleadoDto: UpdateEmpleadoDto) {
+    const user = await this.usersRepository.findOne({ where: { dni } });
+
+    if (!user) {
+      throw new BuisnessException('User not found');
+    }
+
+    // Update user fields from the DTO
+    Object.assign(user, updateEmpleadoDto);
+
+    return this.usersRepository.save(user);
   }
 
   remove(id: number) {

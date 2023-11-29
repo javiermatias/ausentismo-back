@@ -55,12 +55,12 @@ export class EmpleadoController {
     return this.empleadoService.findOne(+id);
   }
 
-  @Patch(':id')
+  @Patch(':dni')
   update(
-    @Param('id') id: string,
+    @Param('dni') dni: string,
     @Body() updateEmpleadoDto: UpdateEmpleadoDto,
   ) {
-    return this.empleadoService.update(+id, updateEmpleadoDto);
+    return this.empleadoService.update(+dni, updateEmpleadoDto);
   }
   @Roles(ERole.Admin, ERole.RRHH)
   @Delete(':id')
