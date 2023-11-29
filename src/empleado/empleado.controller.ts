@@ -56,11 +56,14 @@ export class EmpleadoController {
   }
 
   @Patch(':dni')
-  update(
+  async update(
     @Param('dni') dni: string,
     @Body() updateEmpleadoDto: UpdateEmpleadoDto,
   ) {
-    return this.empleadoService.update(+dni, updateEmpleadoDto);
+    await this.empleadoService.update(+dni, updateEmpleadoDto);
+    return {
+      message: 'User update successfully',
+    };
   }
   @Roles(ERole.Admin, ERole.RRHH)
   @Delete(':id')
