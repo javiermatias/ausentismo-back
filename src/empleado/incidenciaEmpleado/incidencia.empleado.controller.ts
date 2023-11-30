@@ -11,7 +11,7 @@ export class IncidenciasEmpleadoController {
     private readonly incidenciasEmplService: IncidenciaEmpleadoService,
   ) {}
 
-  @Roles(ERole.Empleado, ERole.Supervisor, ERole.Admin)
+  @Roles(ERole.Empleado, ERole.Encargado, ERole.Admin)
   @Get()
   findAll(@Query() pagination: Pagination, @Req() req: Request) {
     const user: UserDto = req['user'];
@@ -19,7 +19,7 @@ export class IncidenciasEmpleadoController {
     return this.incidenciasEmplService.findAll(pagination, user.id);
   }
 
-  /* @Roles(ERole.Empleado, ERole.Supervisor, ERole.Admin)
+  /* @Roles(ERole.Empleado, ERole.Encargado, ERole.Admin)
   @Get(':id')
   async findOne(@Param('id') id: number, @Query() pagination: Pagination) {
     return this.incidenciasEmplService.findByEmpleado

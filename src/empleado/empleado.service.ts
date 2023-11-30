@@ -9,6 +9,7 @@ import { Pagination } from 'src/utils/pagination';
 import { UsersService } from 'src/users/users.service';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { BuisnessException } from 'src/utils/buisness.exception';
+import { ERole } from 'src/auth/role.enum';
 
 @Injectable()
 export class EmpleadoService {
@@ -55,12 +56,16 @@ export class EmpleadoService {
     };
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} empleado`;
+  async findOne(dni: number) {
+    const employee = await this.usersRepository.findOne({ where: { dni } });
+    if (employee && (employee.role.roleName = ERole.Encargado)) {
+      return employee;
+    }
+    return null;
   }
 
   async update(dni: number, updateEmpleadoDto: UpdateEmpleadoDto) {
-    const user = await this.usersRepository.findOne({ where: { dni } });
+    const user = await this.findOne(dni);
 
     if (!user) {
       throw new BuisnessException('User not found');
@@ -72,8 +77,13 @@ export class EmpleadoService {
     return this.usersRepository.save(user);
   }
 
-  remove(id: number) {
-    return this.usersRepository.delete(id);
+  async remove(dni: number) {
+    const user = await this.findOne(dni);
+
+    if (!user) {
+      throw new BuisnessException('User not found');
+    }
+    return this.usersRepository.delete({ dni });
   }
 }
 

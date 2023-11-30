@@ -7,6 +7,7 @@ import { Pagination } from 'src/utils/pagination';
 import { UserDto } from '../dto/auth.user.dto';
 import { CreateEmpleadoDto } from '../dto/create-empleado.dto';
 import { UpdateEmpleadoDto } from '../dto/update-empleado.dto';
+import { ERole } from 'src/auth/role.enum';
 
 @Injectable()
 export class EncargadoService {
@@ -31,7 +32,7 @@ export class EncargadoService {
       FROM user
       INNER JOIN role ON user.roleId = role.id
       INNER JOIN empresa ON user.empresaId= empresa.id
-      WHERE role.roleName = 'supervisor'
+      WHERE role.roleName = ${ERole.Encargado}
       AND empresa.id = ${user.empresaId}
       AND (user.nombre LIKE '%${pagination.search}%' OR user.apellido LIKE '%${pagination.search}%' OR user.dni LIKE '%${pagination.search}%')
       LIMIT ${pagination.limit} OFFSET ${skip};

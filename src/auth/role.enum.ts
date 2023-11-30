@@ -1,6 +1,6 @@
 export enum ERole {
   Admin = 'admin',
-  Supervisor = 'supervisor',
+  Encargado = 'encargado',
   Empleado = 'empleado',
   RRHH = 'rrhh',
 }

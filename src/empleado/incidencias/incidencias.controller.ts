@@ -8,7 +8,7 @@ import { Pagination } from 'src/utils/pagination';
 export class IncidenciasController {
   constructor(private readonly incidenciasService: IncidenciasService) {}
 
-  @Roles(ERole.Empleado, ERole.Supervisor, ERole.Admin)
+  @Roles(ERole.Empleado, ERole.Encargado, ERole.Admin)
   @Get()
   findAll(@Query() pagination: Pagination) {
     return this.incidenciasService.findAll(pagination);

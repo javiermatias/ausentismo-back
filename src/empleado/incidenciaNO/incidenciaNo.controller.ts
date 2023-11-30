@@ -27,7 +27,7 @@ export class IncidenciaNoController {
     private readonly emailService: EmailService,
   ) {}
 
-  @Roles(ERole.Empleado, ERole.Supervisor, ERole.Admin)
+  @Roles(ERole.Empleado, ERole.Encargado, ERole.Admin)
   @Post()
   async create(
     @Body() createIncidenciaNoDto: CreateIncidenciaNoDto,
@@ -57,7 +57,7 @@ export class IncidenciaNoController {
     return this.incidenciaNoService.findOne(+nro_referencia);
   }
 
-  /*   @Roles(ERole.Empleado, ERole.Supervisor, ERole.Admin)
+  /*   @Roles(ERole.Empleado, ERole.Encargado, ERole.Admin)
     @Get()
     findAll() {
       return this.empleadoService.findAll();
