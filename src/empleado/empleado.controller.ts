@@ -18,6 +18,7 @@ import { Roles } from '../auth/decorators/roles.decorator';
 import { ERole } from '../auth/role.enum';
 import { UserDto } from './dto/auth.user.dto';
 import { Pagination } from 'src/utils/pagination';
+import { BuisnessException } from 'src/utils/buisness.exception';
 
 //import { Public } from 'src/auth/decorators/public.decorator';
 
@@ -68,6 +69,8 @@ export class EmpleadoController {
   @Roles(ERole.Admin, ERole.RRHH)
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.empleadoService.remove(+id);
+    const dni = parseInt(id);
+    if (!dni) return new BuisnessException('Error parse DNI');
+    return this.empleadoService.remove(dni);
   }
 }

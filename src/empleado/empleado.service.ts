@@ -58,7 +58,7 @@ export class EmpleadoService {
 
   async findOne(dni: number) {
     const employee = await this.usersRepository.findOne({ where: { dni } });
-    if (employee && (employee.role.roleName = ERole.Encargado)) {
+    if (employee && (employee.role.roleName = ERole.Empleado)) {
       return employee;
     }
     return null;
