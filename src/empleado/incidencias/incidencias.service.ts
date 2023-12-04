@@ -36,7 +36,7 @@ export class IncidenciasService {
       incidencia inc
     LEFT JOIN
       user u1 ON inc.userId = u1.id
-	LEFT JOIN
+	  LEFT JOIN
       sucursal s ON inc.sucursalId = s.id
 
     UNION ALL
@@ -52,7 +52,7 @@ export class IncidenciasService {
       incidencia_no incNO
     LEFT JOIN
       user u2 ON incNO.userId = u2.id
-	LEFT JOIN
+	  LEFT JOIN
       sucursal s ON incNO.sucursalId = s.id
 
     ORDER BY
@@ -80,6 +80,7 @@ export class IncidenciasService {
     const incidenciaAll = await this.incidenciaRepository.query(
       `
     SELECT
+      inc.nroReferencia,
       inc.createdAt,
       u1.id AS userId,
       CONCAT(u1.nombre, ' ', u1.apellido) AS Empleado,
@@ -97,6 +98,7 @@ export class IncidenciasService {
     UNION ALL
 
     SELECT
+      incNO.nroReferencia,
       incNO.createdAt,
       u2.id AS userId,
       CONCAT(u2.nombre, ' ', u2.apellido) AS Empleado,
@@ -137,6 +139,7 @@ export class IncidenciasService {
     const incidenciaAll = await this.incidenciaRepository.query(
       `
     SELECT
+      inc.nroReferencia,
       inc.createdAt,
       u1.id AS userId,
       CONCAT(u1.nombre, ' ', u1.apellido) AS Empleado,
@@ -154,6 +157,7 @@ export class IncidenciasService {
     UNION ALL
 
     SELECT
+      incNO.nroReferencia,
       incNO.createdAt,
       u2.id AS userId,
       CONCAT(u2.nombre, ' ', u2.apellido) AS Empleado,
@@ -169,8 +173,7 @@ export class IncidenciasService {
       incNO.createdAt BETWEEN '${startDate}' AND '${endDate}'
     ORDER BY
       createdAt desc, userId    
-    LIMIT ${pagination.limit} OFFSET ${offset};
-    
+    LIMIT ${pagination.limit} OFFSET ${offset};    
    `,
     );
     return {
@@ -261,7 +264,8 @@ export class IncidenciasService {
     const total = rowIncidencia + rowIncidenciaNo;
     const incidenciaAll = await this.incidenciaRepository.query(
       `
-      SELECT
+    SELECT
+      inc.nroReferencia,
       inc.createdAt,
       u1.id AS userId,
       CONCAT(u1.nombre, ' ', u1.apellido) AS Empleado,
@@ -279,6 +283,7 @@ export class IncidenciasService {
     UNION ALL
 
     SELECT
+      incNO.nroReferencia,
       incNO.createdAt,
       u2.id AS userId,
       CONCAT(u2.nombre, ' ', u2.apellido) AS Empleado,
