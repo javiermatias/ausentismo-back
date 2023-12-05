@@ -45,6 +45,16 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
+## docker-compose
+
+```bash
+# docker run
+$ docker-compose up -d
+# docker build
+$ docker-compose up --build
+
+```
+
 ## Vercel Deployment
 verce --prod
 
