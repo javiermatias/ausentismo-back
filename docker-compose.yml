@@ -5,7 +5,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "3001:3001" # Map your local port to the container's port
+      - "80:3001" # Map your local port to the container's port
 
   mysql:
     image: mysql:latest
@@ -15,4 +15,4 @@ services:
       MYSQL_USER: root
       MYSQL_PASSWORD: your_password
     ports:
-      - "3307:3306" # Map your local port to the container's port
+      - "3306:3306" # Map your local port to the container's port
