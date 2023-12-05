@@ -52,7 +52,7 @@ $ npm run start:prod
 $ docker-compose up -d
 # docker build
 $ docker-compose up --build
-
+ ssh -i "ausentismo key.pem" ubuntu@ec2-107-23-192-132.compute-1.amazonaws.com
 ```
 
 ## Vercel Deployment
