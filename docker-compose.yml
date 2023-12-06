@@ -7,13 +7,5 @@ services:
     ports:
       - "80:3001" # Map your local port to the container's port
     env_file:
-      - .env
-  mysql:
-    image: mysql:latest
-    environment:
-      MYSQL_ROOT_PASSWORD: 123456
-      MYSQL_DATABASE: ausentismo
-      MYSQL_USER: root
-      MYSQL_PASSWORD: your_password
-    ports:
-      - "3306:3306" # Map your local port to the container's port
+      - .env.prod1
+
