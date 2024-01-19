@@ -41,6 +41,7 @@ export class IncidenciaController {
         user.email,
         incidencia,
       );
+      console.log(user);
       console.log(email);
     }
 

@@ -88,7 +88,7 @@ export class EmailService {
 
   async searchRRHH(idEmpresa: number): Promise<User[]> {
     const role = await this.roleRepository.findOne({
-      where: { roleName: ERole.Encargado },
+      where: { roleName: ERole.RRHH },
     });
     const usersInRoleAndCompany = await this.usersRepository
       .createQueryBuilder('user')

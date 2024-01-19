@@ -50,9 +50,9 @@ export class IncidenciasService {
       s.nombre AS Sucursal
     FROM
       incidencia_no incNO
-    LEFT JOIN
+    INNER JOIN
       user u2 ON incNO.userId = u2.id
-	  LEFT JOIN
+	  INNER JOIN
       sucursal s ON incNO.sucursalId = s.id
 
     ORDER BY
