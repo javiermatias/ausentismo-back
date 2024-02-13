@@ -5,7 +5,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "80:3001" # Map your local port to the container's port
+      - "3001:3001" # Map your local port to the container's port
     env_file:
-      - .env.prod1
+      - .env
 
