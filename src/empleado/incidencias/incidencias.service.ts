@@ -18,11 +18,8 @@ export class IncidenciasService {
     private sucursalRepository: Repository<Sucursal>,
   ) {}
 
-  async findAll(pagination: Pagination) {
-    const offset = (pagination.page - 1) * pagination.limit;
-    const rowIncidencia = await this.incidenciaRepository.count();
-    const rowIncidenciaNo = await this.incidenciaRepositoryNo.count();
-    const total = rowIncidencia + rowIncidenciaNo;
+  async findAll(pagination: Pagination, empresaId:Number) {
+    const offset = (pagination.page - 1) * pagination.limit;    
     const incidenciaAll = await this.incidenciaRepository.query(
       `
       SELECT
@@ -38,7 +35,8 @@ export class IncidenciasService {
       user u1 ON inc.userId = u1.id
 	  LEFT JOIN
       sucursal s ON inc.sucursalId = s.id
-
+    WHERE 
+      s.empresaId = ${empresaId}
     UNION ALL
 
     SELECT
@@ -54,13 +52,16 @@ export class IncidenciasService {
       user u2 ON incNO.userId = u2.id
 	  INNER JOIN
       sucursal s ON incNO.sucursalId = s.id
-
+    WHERE 
+      s.empresaId = ${empresaId}
     ORDER BY
       createdAt desc, userId
     
     LIMIT ${pagination.limit} OFFSET ${offset};
    `,
     );
+    console.log(incidenciaAll);
+    const total = incidenciaAll.length;
 
     return {
       page: pagination.page,
@@ -72,8 +73,8 @@ export class IncidenciasService {
 
   async findAllBySucursal(pagination: Pagination, sucursalId: number) {
     const offset = (pagination.page - 1) * pagination.limit;
-    console.log(offset);
-    console.log(pagination.limit);
+    //console.log(offset);
+    //console.log(pagination.limit);
     const rowIncidencia = await this.incidenciaRepository.count();
     const rowIncidenciaNo = await this.incidenciaRepositoryNo.count();
     const total = rowIncidencia + rowIncidenciaNo;

@@ -12,6 +12,8 @@ import { APP_GUARD } from '@nestjs/core';
 import { SendGridModule } from '@anchan828/nest-sendgrid';
 import { EmpresaModule } from './empresa/empresa.module';
 import { SucursalModule } from './sucursal/sucursal.module';
+import { RrhhModule } from './rrhh/rrhh.module';
+
 
 @Module({
   imports: [
@@ -51,6 +53,8 @@ import { SucursalModule } from './sucursal/sucursal.module';
     UploadModule,
     EmpresaModule,
     SucursalModule,
+    RrhhModule,
+
   ],
   controllers: [AppController],
   providers: [

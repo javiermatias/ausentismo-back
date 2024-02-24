@@ -68,6 +68,12 @@ export class Incidencia {
 
   @ManyToOne(() => Sucursal, (sucursal) => sucursal.incidencias)
   sucursal: Sucursal;
+
+  @Column({ type: 'varchar', length: 1000, default:"NO CONTROL"  })
+  control: string;
+
+  @Column({ type: 'varchar', length: 1000, default:"NO"  })
+  justificado: string;
 }
 
 // export interface Incidencia {
