@@ -44,5 +44,6 @@ import { UsersModule } from 'src/users/users.module';
     EmailService,
     IncidenciaEmpleadoService,
   ],
+  
 })
 export class EmpleadoModule {}

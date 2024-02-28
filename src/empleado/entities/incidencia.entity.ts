@@ -69,10 +69,10 @@ export class Incidencia {
   @ManyToOne(() => Sucursal, (sucursal) => sucursal.incidencias)
   sucursal: Sucursal;
 
-  @Column({ type: 'varchar', length: 1000, default:"NO CONTROL"  })
+  @Column({ type: 'varchar', length: 1000, default:"nocontrol"  })
   control: string;
 
-  @Column({ type: 'varchar', length: 1000, default:"NO"  })
+  @Column({ type: 'varchar', length: 1000, default:"no"  })
   justificado: string;
 }
 
