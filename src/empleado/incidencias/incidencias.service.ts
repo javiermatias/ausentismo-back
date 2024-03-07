@@ -28,7 +28,9 @@ export class IncidenciasService {
       u1.id AS userId,
       CONCAT(u1.nombre, ' ', u1.apellido) AS Empleado,
       'Enfermedad' AS tipo,
-      s.nombre AS Sucursal
+      s.nombre AS Sucursal,
+      inc.control,
+      inc.justificado
     FROM
       incidencia inc
     LEFT JOIN
@@ -45,7 +47,9 @@ export class IncidenciasService {
       u2.id AS userId,
       CONCAT(u2.nombre, ' ', u2.apellido) AS Empleado,
       'Otros' AS tipo,
-      s.nombre AS Sucursal
+      s.nombre AS Sucursal,
+      incNO.control,
+      incNO.justificado
     FROM
       incidencia_no incNO
     INNER JOIN
