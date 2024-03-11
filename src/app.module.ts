@@ -13,6 +13,7 @@ import { SendGridModule } from '@anchan828/nest-sendgrid';
 import { EmpresaModule } from './empresa/empresa.module';
 import { SucursalModule } from './sucursal/sucursal.module';
 import { RrhhModule } from './rrhh/rrhh.module';
+import { EstadisticasModule } from './estadisticas/estadisticas.module';
 
 
 @Module({
@@ -54,6 +55,7 @@ import { RrhhModule } from './rrhh/rrhh.module';
     EmpresaModule,
     SucursalModule,
     RrhhModule,
+    EstadisticasModule,
 
   ],
   controllers: [AppController],

@@ -14,7 +14,7 @@ export class IncidenciasController {
   @Get()
   findAll(@Query() pagination: Pagination, @Req() req: Request) {
     const user: UserDto = req['user'];
-    console.log(user);
+   // console.log(user);
     return this.incidenciasService.findAll(pagination, user.empresaId);
   }
 
