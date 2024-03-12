@@ -20,7 +20,7 @@ export class EstadisticasService {
     return 'This action adds a new estadistica';
   }
 
-  async findByMonth(year:Number, empresaId:Number) {
+  async findByMonth(year: Number, empresaId: Number) {
     const incidenciaAll = await this.incidenciaRepository.query(
       `
     SELECT 
@@ -39,7 +39,14 @@ export class EstadisticasService {
     ORDER BY month;     
     `
     );
-    return incidenciaAll;
+    
+    const transformedData = incidenciaAll.map(item => ({
+      mes: this.getMonthName(item.month),
+      cantidad: parseInt(item.quantity),
+    }));
+
+    return transformedData;
+    //return incidenciaAll;
   }
 
   findOne(id: number) {
@@ -53,5 +60,14 @@ export class EstadisticasService {
 
   remove(id: number) {
     return `This action removes a #${id} estadistica`;
+  }
+
+  // Function to convert month numbers to month names
+  private getMonthName(monthNumber: number): string {
+    const months = [
+      "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+      "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+    ];
+    return months[monthNumber - 1] || '';
   }
 }
