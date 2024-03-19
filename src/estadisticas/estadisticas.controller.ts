@@ -1,7 +1,5 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Req } from '@nestjs/common';
 import { EstadisticasService } from './estadisticas.service';
-import { CreateEstadisticaDto } from './dto/create-estadistica.dto';
-import { UpdateEstadisticaDto } from './dto/update-estadistica.dto';
 import { UserDto } from 'src/empleado/dto/auth.user.dto';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { ERole } from 'src/auth/role.enum';
@@ -12,9 +10,10 @@ export class EstadisticasController {
   
   @Roles(ERole.Admin, ERole.RRHH)
   @Get('controlvalues')
-  getControlValues() {
+  getControlValues(@Req() req: Request) {
       // Logic for /estadisticas/controlvalues route
-      return 'GET request to /estadisticas/controlvalues';
+      const user: UserDto = req['user'];
+      return this.estadisticasService.combineResultsMonths(2023,user.empresaId);
   }
   ///Contadores globales
   @Roles(ERole.Admin, ERole.RRHH)
@@ -31,9 +30,5 @@ export class EstadisticasController {
     const user: UserDto = req['user'];
     return this.estadisticasService.findByMonth(year, user.empresaId);
   }
-
-  
-
-
 
 }

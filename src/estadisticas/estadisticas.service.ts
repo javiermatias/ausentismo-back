@@ -50,6 +50,70 @@ export class EstadisticasService {
     //return incidenciaAll;
   }
 
+  async findByMonthIncidencia(year: Number, empresaId: Number) {
+    const incidenciaAll = await this.incidenciaRepository.query(
+      `
+      SELECT MONTH(inc.createdAt) AS month, COUNT(*) AS quantity
+      FROM incidencia inc INNER JOIN sucursal s ON inc.sucursalId = s.id where s.empresaId = ${empresaId} AND YEAR(inc.createdAt) = ${year} 
+      GROUP BY MONTH(inc.createdAt)
+      ORDER BY month;     
+    `
+    );
+
+    const transformedData = incidenciaAll.map(item => ({
+      mes: this.getMonthName(item.month),
+      cantidad: parseInt(item.quantity),
+    }));
+
+    return transformedData;
+    //return incidenciaAll;
+  }
+
+  async findByMonthIncidencia_no(year: Number, empresaId: Number) {
+    const incidenciaAll = await this.incidenciaRepository.query(
+      `
+      SELECT MONTH(inc.createdAt) AS month, COUNT(*) AS quantity
+      FROM incidencia_no inc INNER JOIN sucursal s ON inc.sucursalId = s.id where s.empresaId = ${empresaId} AND YEAR(inc.createdAt) = ${year} 
+      GROUP BY MONTH(inc.createdAt)
+      ORDER BY month;      
+    `
+    );
+
+    const transformedData = incidenciaAll.map(item => ({
+      mes: this.getMonthName(item.month),
+      cantidad: parseInt(item.quantity),
+    }));
+
+    return transformedData;
+    //return incidenciaAll;
+  }
+  async combineResultsMonths(year:number, empresaId:number) {
+    const result1 = await this.findByMonthIncidencia(year, empresaId);
+    const result2 = await this.findByMonthIncidencia_no(year, empresaId);
+    const map = new Map();
+    result1.forEach(inc => {
+      map.set(inc.mes, {cantInc:inc.cantidad, cantIncNo:0})
+    });
+
+    //console.log(result);
+    result2.forEach(incNo => {
+      if(map.has(incNo.mes)){
+         let m = map.get(incNo.mes)
+         m.cantIncNo = incNo.cantidad;
+         map.set(incNo.mes, m);  
+      }else{
+        map.set(incNo.mes, {cantInc:0, cantIncNo:incNo.cantidad})
+      }
+     
+    });
+
+    const result = Array.from(map).map(([name, value]) => ({ name, ...value }));
+    return result;
+  }
+
+
+
+
   async getCountIncByDayMonthYear(empresaId: Number): Promise<CounterDto> {
     //const query = ;
     //console.log(empresaId)
