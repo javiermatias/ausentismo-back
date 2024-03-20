@@ -182,8 +182,38 @@ export class EstadisticasService {
     return combinedResults;
   }
 
-  async countControlValues(){
-    
+  async countByMonth(month: string, empresaId: Number) {
+     const incidencias = await this.countByMonthInc(month, empresaId);
+     const incidencias_no = await this.countByMonthIncNo(month, empresaId);
+     return {
+      incidencias: incidencias.total,
+      incidenciasNo: incidencias_no.total
+    };  
+  
+  }
+
+  async countByMonthInc(month: string, empresaId: Number) {
+    const englishMonth = this.translateSpanishMonthToEnglish(month);
+    console.log(englishMonth);
+    const result = await this.incidenciaRepository.query(`
+    SELECT COUNT(*) AS total
+    FROM incidencia inc INNER JOIN sucursal s ON inc.sucursalId = s.id
+    WHERE MONTHNAME(inc.createdAt) = '${englishMonth}' AND s.empresaId = ${empresaId};
+    `)
+
+    return result[0];
+  }
+
+  async countByMonthIncNo(month: string, empresaId: Number) {
+    const englishMonth = this.translateSpanishMonthToEnglish(month);
+    console.log(englishMonth);
+    const result = await this.incidenciaRepository.query(`
+    SELECT COUNT(*) AS total
+    FROM incidencia_no inc INNER JOIN sucursal s ON inc.sucursalId = s.id
+    WHERE MONTHNAME(inc.createdAt) = '${englishMonth}' AND s.empresaId = ${empresaId};
+    `)
+
+    return result[0];
   }
 
 
@@ -209,4 +239,32 @@ export class EstadisticasService {
     ];
     return months[monthNumber - 1] || '';
   }
+
+
+
+  translateSpanishMonthToEnglish(spanishMonth: string): string {
+    const spanishToEnglishMap: { [key: string]: string } = {
+        "Enero": "January", 
+        "Febrero": "February", 
+        "Marzo": "March", 
+        "Abril": "April", 
+        "Mayo": "May", 
+        "Junio": "June",
+        "Julio": "July", 
+        "Agosto": "August", 
+        "Septiembre": "September", 
+        "Octubre": "October", 
+        "Noviembre": "November", 
+        "Diciembre": "December"
+    };
+
+    const capitalizedSpanishMonth = spanishMonth.charAt(0).toUpperCase() + spanishMonth.slice(1);
+    const englishMonth = spanishToEnglishMap[capitalizedSpanishMonth];
+
+    if (englishMonth) {
+        return englishMonth;
+    } else {
+        throw new Error("Invalid Spanish month name");
+    }
+}
 }

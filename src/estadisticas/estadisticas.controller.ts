@@ -15,6 +15,15 @@ export class EstadisticasController {
       const user: UserDto = req['user'];
       return this.estadisticasService.combineResultsMonths(2023,user.empresaId);
   }
+
+  @Roles(ERole.Admin, ERole.RRHH)
+  @Get('mes/:mes')
+  getByMonth(@Param('mes') month: string, @Req() req: Request) {
+      // Logic for /estadisticas/controlvalues route
+      const user: UserDto = req['user'];
+      return this.estadisticasService.countByMonth(month, user.empresaId)
+  }
+
   ///Contadores globales
   @Roles(ERole.Admin, ERole.RRHH)
   @Get()
