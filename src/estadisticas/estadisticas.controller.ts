@@ -13,7 +13,7 @@ export class EstadisticasController {
   getControlValues(@Req() req: Request) {
       // Logic for /estadisticas/controlvalues route
       const user: UserDto = req['user'];
-      return this.estadisticasService.combineResultsMonths(2023,user.empresaId);
+      return this.estadisticasService.countByMonthControlInc("Marzo", user.empresaId);
   }
 
   @Roles(ERole.Admin, ERole.RRHH)

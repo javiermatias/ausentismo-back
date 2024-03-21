@@ -192,6 +192,72 @@ export class EstadisticasService {
   
   }
 
+
+  async countByMonthControlIncNo(month: string, empresaId: Number) {
+    const englishMonth = this.translateSpanishMonthToEnglish(month);
+    console.log(englishMonth);
+    const result = await this.incidenciaRepository.query(`
+    SELECT control, COUNT(*) as count     
+    FROM incidencia_no inc INNER JOIN sucursal s ON inc.sucursalId = s.id
+    WHERE MONTHNAME(inc.createdAt) = '${englishMonth}' AND YEAR(inc.createdAt) = YEAR(NOW())  AND s.empresaId = ${empresaId}
+    GROUP BY control;
+    `)
+
+    const convertedArray = result.map(item => {
+      let name;
+      switch (item.control) {
+        case 'DOMICILIO':
+          name = 'Domicilio';
+          break;
+        case 'CONSULTORIO':
+          name = 'Consultorio';
+          break;
+        case 'NOCONTROL':
+          name = 'No Control';
+          break;
+        default:
+          name = item.control;
+      }
+      return { name, value: item.count };
+    });
+
+    return convertedArray;
+  }
+  async countByMonthControlInc(month: string, empresaId: Number) {
+    const englishMonth = this.translateSpanishMonthToEnglish(month);
+    console.log(englishMonth);
+    const result = await this.incidenciaRepository.query(`
+    SELECT control, COUNT(*) as count     
+    FROM (
+        SELECT control FROM incidencia inc INNER JOIN sucursal s ON inc.sucursalId = s.id WHERE MONTHNAME(inc.createdAt) = '${englishMonth}' AND YEAR(inc.createdAt) = YEAR(NOW())  AND s.empresaId = ${empresaId}
+        UNION ALL
+        SELECT control FROM incidencia_no inc_no INNER JOIN sucursal s ON inc_no.sucursalId = s.id WHERE MONTHNAME(inc_no.createdAt) = '${englishMonth}' AND YEAR(inc_no.createdAt) = YEAR(NOW()) AND s.empresaId = ${empresaId}
+    ) combined_incidencias
+    
+    GROUP BY control;
+    `)
+
+    const convertedArray = result.map(item => {
+      let name;
+      switch (item.control) {
+        case 'DOMICILIO':
+          name = 'Domicilio';
+          break;
+        case 'CONSULTORIO':
+          name = 'Consultorio';
+          break;
+        case 'NOCONTROL':
+          name = 'No Control';
+          break;
+        default:
+          name = item.control;
+      }
+      return { name, value: item.count };
+    });
+
+    return convertedArray;
+  }
+
   async countByMonthInc(month: string, empresaId: Number) {
     const englishMonth = this.translateSpanishMonthToEnglish(month);
     console.log(englishMonth);
