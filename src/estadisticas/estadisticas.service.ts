@@ -87,24 +87,24 @@ export class EstadisticasService {
     return transformedData;
     //return incidenciaAll;
   }
-  async combineResultsMonths(year:number, empresaId:number) {
+  async combineResultsMonths(year: number, empresaId: number) {
     const result1 = await this.findByMonthIncidencia(year, empresaId);
     const result2 = await this.findByMonthIncidencia_no(year, empresaId);
     const map = new Map();
     result1.forEach(inc => {
-      map.set(inc.mes, {cantInc:inc.cantidad, cantIncNo:0})
+      map.set(inc.mes, { cantInc: inc.cantidad, cantIncNo: 0 })
     });
 
     //console.log(result);
     result2.forEach(incNo => {
-      if(map.has(incNo.mes)){
-         let m = map.get(incNo.mes)
-         m.cantIncNo = incNo.cantidad;
-         map.set(incNo.mes, m);  
-      }else{
-        map.set(incNo.mes, {cantInc:0, cantIncNo:incNo.cantidad})
+      if (map.has(incNo.mes)) {
+        let m = map.get(incNo.mes)
+        m.cantIncNo = incNo.cantidad;
+        map.set(incNo.mes, m);
+      } else {
+        map.set(incNo.mes, { cantInc: 0, cantIncNo: incNo.cantidad })
       }
-     
+
     });
 
     const result = Array.from(map).map(([name, value]) => ({ name, ...value }));
@@ -130,14 +130,14 @@ export class EstadisticasService {
     `);
     //return result;
     //console.log(result);
-   // Process the result to desired object format
+    // Process the result to desired object format
     return result.map(row => ({
       day: row.day ? parseInt(row.day) : 0,
       week: row.week ? parseInt(row.week) : 0,
       month: row.month ? parseInt(row.month) : 0,
       year: row.year ? parseInt(row.year) : 0,
-      
-    })); 
+
+    }));
   }
 
   async getCountIncNoByDayMonthYear(empresaId: Number): Promise<CounterDto> {
@@ -156,21 +156,21 @@ export class EstadisticasService {
     `);
     //return result;
     //console.log(result);
-   // Process the result to desired object format
+    // Process the result to desired object format
     return result.map(row => ({
       day: row.day ? parseInt(row.day) : 0,
       week: row.week ? parseInt(row.week) : 0,
       month: row.month ? parseInt(row.month) : 0,
       year: row.year ? parseInt(row.year) : 0,
-      
-    })); 
+
+    }));
   }
 
   async combineResults(empresaId): Promise<CounterDto> {
     const result1 = await this.getCountIncByDayMonthYear(empresaId);
     const result2 = await this.getCountIncNoByDayMonthYear(empresaId);
-     console.log(result1);
-     console.log(result2);
+    console.log(result1);
+    console.log(result2);
     // Combine the results
     const combinedResults = {
       day: result1[0].day + result2[0].day,
@@ -181,19 +181,27 @@ export class EstadisticasService {
 
     return combinedResults;
   }
-
+  //http://localhost:3001/api/estadisticas/mes/March
   async countByMonth(month: string, empresaId: Number) {
-     const incidencias = await this.countByMonthInc(month, empresaId);
-     const incidencias_no = await this.countByMonthIncNo(month, empresaId);
-     return {
-      incidencias: incidencias.total,
-      incidenciasNo: incidencias_no.total
-    };  
-  
+    const incidencias = await this.countByMonthInc(month, empresaId);
+    const incidencias_no = await this.countByMonthIncNo(month, empresaId);
+    return [{
+      name: 'Enfermedad',
+      value: parseInt(incidencias.total)
+    },
+    {
+      name: 'Otros',
+      value: parseInt(incidencias_no.total)
+    }
+    ];
+    /*    const data1 = [
+         { name: 'Enfermedad', value: 11 },
+         { name: 'Otros', value: 10 }
+       ]; */
   }
 
 
-  async countByMonthControlIncNo(month: string, empresaId: Number) {
+/*   async countByMonthControlIncNo(month: string, empresaId: Number) {
     const englishMonth = this.translateSpanishMonthToEnglish(month);
     console.log(englishMonth);
     const result = await this.incidenciaRepository.query(`
@@ -222,11 +230,14 @@ export class EstadisticasService {
     });
 
     return convertedArray;
-  }
-  async countByMonthControlInc(month: string, empresaId: Number) {
+  } */
+
+  //http://localhost:3001/api/estadisticas/control/todo
+  async countByMonthControl(month: string, empresaId: Number) {
     const englishMonth = this.translateSpanishMonthToEnglish(month);
-    console.log(englishMonth);
-    const result = await this.incidenciaRepository.query(`
+    let result = [];
+    if(englishMonth){
+    result = await this.incidenciaRepository.query(`
     SELECT control, COUNT(*) as count     
     FROM (
         SELECT control FROM incidencia inc INNER JOIN sucursal s ON inc.sucursalId = s.id WHERE MONTHNAME(inc.createdAt) = '${englishMonth}' AND YEAR(inc.createdAt) = YEAR(NOW())  AND s.empresaId = ${empresaId}
@@ -236,6 +247,21 @@ export class EstadisticasService {
     
     GROUP BY control;
     `)
+  
+   }else{
+    result = await this.incidenciaRepository.query(`
+    SELECT control, COUNT(*) as count     
+    FROM (
+        SELECT control FROM incidencia inc INNER JOIN sucursal s ON inc.sucursalId = s.id WHERE YEAR(inc.createdAt) = YEAR(NOW())  AND s.empresaId = ${empresaId}
+        UNION ALL
+        SELECT control FROM incidencia_no inc_no INNER JOIN sucursal s ON inc_no.sucursalId = s.id WHERE YEAR(inc_no.createdAt) = YEAR(NOW()) AND s.empresaId = ${empresaId}
+    ) combined_incidencias
+    
+    GROUP BY control;
+    `)
+
+
+   }
 
     const convertedArray = result.map(item => {
       let name;
@@ -252,50 +278,96 @@ export class EstadisticasService {
         default:
           name = item.control;
       }
-      return { name, value: item.count };
+      return { name, value: parseInt(item.count) };
     });
+
+    return convertedArray;
+  }
+
+  async countByMonthJustifica(month: string, empresaId: Number) {
+    const englishMonth = this.translateSpanishMonthToEnglish(month);
+    let result = [];
+    if(englishMonth){
+    result = await this.incidenciaRepository.query(`
+    SELECT justificado, COUNT(*) as count     
+    FROM (
+        SELECT justificado FROM incidencia inc INNER JOIN sucursal s ON inc.sucursalId = s.id WHERE MONTHNAME(inc.createdAt) = '${englishMonth}' AND YEAR(inc.createdAt) = YEAR(NOW())  AND s.empresaId = ${empresaId}
+        UNION ALL
+        SELECT justificado FROM incidencia_no inc_no INNER JOIN sucursal s ON inc_no.sucursalId = s.id WHERE MONTHNAME(inc_no.createdAt) = '${englishMonth}' AND YEAR(inc_no.createdAt) = YEAR(NOW()) AND s.empresaId = ${empresaId}
+    ) combined_incidencias
+    
+    GROUP BY justificado;
+    `)
+  
+   }else{
+    result = await this.incidenciaRepository.query(`
+    SELECT justificado, COUNT(*) as count     
+    FROM (
+        SELECT justificado FROM incidencia inc INNER JOIN sucursal s ON inc.sucursalId = s.id WHERE YEAR(inc.createdAt) = YEAR(NOW())  AND s.empresaId = ${empresaId}
+        UNION ALL
+        SELECT justificado FROM incidencia_no inc_no INNER JOIN sucursal s ON inc_no.sucursalId = s.id WHERE YEAR(inc_no.createdAt) = YEAR(NOW()) AND s.empresaId = ${empresaId}
+    ) combined_incidencias
+    
+    GROUP BY justificado;
+    `)
+
+
+   }
+
+  const convertedArray = result.map(item => {
+      
+      return { name: item.justificado, value: parseInt(item.count) };
+    }); 
 
     return convertedArray;
   }
 
   async countByMonthInc(month: string, empresaId: Number) {
     const englishMonth = this.translateSpanishMonthToEnglish(month);
-    console.log(englishMonth);
-    const result = await this.incidenciaRepository.query(`
+
+    if (englishMonth) {
+
+      const result = await this.incidenciaRepository.query(`
     SELECT COUNT(*) AS total
     FROM incidencia inc INNER JOIN sucursal s ON inc.sucursalId = s.id
-    WHERE MONTHNAME(inc.createdAt) = '${englishMonth}' AND s.empresaId = ${empresaId};
+    WHERE MONTHNAME(inc.createdAt) = '${englishMonth}' AND s.empresaId = ${empresaId} AND YEAR(inc.createdAt) = YEAR(NOW());
     `)
 
-    return result[0];
+      return result[0];
+    } else {
+
+      const result = await this.incidenciaRepository.query(`
+      SELECT COUNT(*) AS total
+      FROM incidencia inc INNER JOIN sucursal s ON inc.sucursalId = s.id
+      WHERE YEAR(inc.createdAt) = YEAR(CURRENT_DATE()) AND s.empresaId = ${empresaId};
+      `)
+      return result[0];
+    }
   }
 
   async countByMonthIncNo(month: string, empresaId: Number) {
     const englishMonth = this.translateSpanishMonthToEnglish(month);
-    console.log(englishMonth);
-    const result = await this.incidenciaRepository.query(`
+    if (englishMonth) {
+      console.log("ingreso por true incNO")
+      const result = await this.incidenciaRepository.query(`
     SELECT COUNT(*) AS total
     FROM incidencia_no inc INNER JOIN sucursal s ON inc.sucursalId = s.id
     WHERE MONTHNAME(inc.createdAt) = '${englishMonth}' AND s.empresaId = ${empresaId};
     `)
+      return result[0];
+    } else {
+      console.log("ingreso por false incNO")
+      const result = await this.incidenciaRepository.query(`
+      SELECT COUNT(*) AS total
+      FROM incidencia_no inc INNER JOIN sucursal s ON inc.sucursalId = s.id
+      WHERE YEAR(inc.createdAt) = YEAR(CURRENT_DATE()) AND s.empresaId = ${empresaId};
+      `)
+      return result[0];
+    }
 
-    return result[0];
+
   }
 
-
-
-  findOne(id: number) {
-
-    return `This action returns a #${id} estadistica`;
-  }
-
-  update(id: number, updateEstadisticaDto: UpdateEstadisticaDto) {
-    return `This action updates a #${id} estadistica`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} estadistica`;
-  }
 
   // Function to convert month numbers to month names
   private getMonthName(monthNumber: number): string {
@@ -310,27 +382,23 @@ export class EstadisticasService {
 
   translateSpanishMonthToEnglish(spanishMonth: string): string {
     const spanishToEnglishMap: { [key: string]: string } = {
-        "Enero": "January", 
-        "Febrero": "February", 
-        "Marzo": "March", 
-        "Abril": "April", 
-        "Mayo": "May", 
-        "Junio": "June",
-        "Julio": "July", 
-        "Agosto": "August", 
-        "Septiembre": "September", 
-        "Octubre": "October", 
-        "Noviembre": "November", 
-        "Diciembre": "December"
+      "Enero": "January",
+      "Febrero": "February",
+      "Marzo": "March",
+      "Abril": "April",
+      "Mayo": "May",
+      "Junio": "June",
+      "Julio": "July",
+      "Agosto": "August",
+      "Septiembre": "September",
+      "Octubre": "October",
+      "Noviembre": "November",
+      "Diciembre": "December"
     };
 
     const capitalizedSpanishMonth = spanishMonth.charAt(0).toUpperCase() + spanishMonth.slice(1);
     const englishMonth = spanishToEnglishMap[capitalizedSpanishMonth];
+    return englishMonth;
 
-    if (englishMonth) {
-        return englishMonth;
-    } else {
-        throw new Error("Invalid Spanish month name");
-    }
-}
+  }
 }

@@ -72,7 +72,7 @@ export class Incidencia {
   @Column({ type: 'varchar', length: 1000, default:"nocontrol"  })
   control: string;
 
-  @Column({ type: 'varchar', length: 1000, default:"no"  })
+  @Column({ type: 'varchar', length: 1000, default:"SI"  })
   justificado: string;
 }
 

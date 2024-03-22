@@ -13,7 +13,7 @@ export class EstadisticasController {
   getControlValues(@Req() req: Request) {
       // Logic for /estadisticas/controlvalues route
       const user: UserDto = req['user'];
-      return this.estadisticasService.countByMonthControlInc("Marzo", user.empresaId);
+      return this.estadisticasService.countByMonthControl("Marzo", user.empresaId);
   }
 
   @Roles(ERole.Admin, ERole.RRHH)
@@ -21,7 +21,24 @@ export class EstadisticasController {
   getByMonth(@Param('mes') month: string, @Req() req: Request) {
       // Logic for /estadisticas/controlvalues route
       const user: UserDto = req['user'];
+      console.log("ingreso por mes")
       return this.estadisticasService.countByMonth(month, user.empresaId)
+  }
+
+  @Roles(ERole.Admin, ERole.RRHH)
+  @Get('control/:mes')
+  getByMonthControl(@Param('mes') month: string, @Req() req: Request) {
+      // Logic for /estadisticas/controlvalues route
+      const user: UserDto = req['user'];      
+      return this.estadisticasService.countByMonthControl(month, user.empresaId);
+  }
+
+  @Roles(ERole.Admin, ERole.RRHH)
+  @Get('justifica/:mes')
+  getByMonthJustifica(@Param('mes') month: string, @Req() req: Request) {
+      // Logic for /estadisticas/controlvalues route
+      const user: UserDto = req['user'];      
+      return this.estadisticasService.countByMonthJustifica(month, user.empresaId);
   }
 
   ///Contadores globales
