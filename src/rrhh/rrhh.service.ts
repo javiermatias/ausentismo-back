@@ -9,18 +9,8 @@ export class RrhhService {
   }
 
   findAll() {
-    return `This action returns all rrhh`;
+    return `This action returns alla rrhh`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} rrhh`;
-  }
 
-  update(id: number, updateRrhhDto: UpdateRrhhDto) {
-    return `This action updates a #${id} rrhh`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} rrhh`;
-  }
 }

@@ -8,13 +8,15 @@ import { JustificaService } from './justifica/justifica/justifica.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Incidencia } from 'src/empleado/entities/incidencia.entity';
 import { IncidenciaNo } from 'src/empleado/entities/incidenciaNo.entity';
+import { ExcelController} from './empleado/excel.controller';
+import { ExcelService } from './empleado/excel.service';
 
 @Module({
   imports: [    
     TypeOrmModule.forFeature([Incidencia, IncidenciaNo]),
   ],
-  controllers: [RrhhController, ControlController, JustificaController],
-  providers: [RrhhService, ControlService, JustificaService],
+  controllers: [RrhhController, ControlController,JustificaController,ExcelController],
+  providers: [RrhhService, ControlService, JustificaService, ExcelService],
 })
 
 
